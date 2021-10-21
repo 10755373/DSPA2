@@ -15,7 +15,7 @@ import cv2
 import numpy as np
 import os 
 
-# Pipeline for reading images and applying random transofrmagions 
+# Pipeline for reading images and applying random transformations 
 class ImageFolder(Dataset):
     def __init__(self, root_dir, transform=None):
         super(ImageFolder,self).__init__() 
@@ -42,6 +42,7 @@ class ImageFolder(Dataset):
 
         return image, label
 
+# transform images (we've decided to not do the horizontal flip anymore)
 transform = A.Compose(
     [
         A.Resize(250,250),
@@ -63,8 +64,10 @@ transform = A.Compose(
     ]
 )
 
-dataset = ImageFolder(root_dir= r'C:\Users\Invitado\Documents\Python\FDS\DSP\practice',transform=transform)
+# make path to the dataset. Save images in a folder and make sure the path is correct in root_dir!
+dataset = ImageFolder(root_dir= r'/Users/rinusvangrunsven/Documents/GitHub/DSPA2/practice',transform=transform)
 
+# make list that's being filled with augmented images, make number of samples bigger in order to get more augmented images 
 num_samples = 6
 dataset_augmented = []
 for i in range(len(dataset)):
@@ -74,6 +77,6 @@ for i in range(len(dataset)):
 # Data Augmented does not contain labels only contains the tensor files
 # In case the labels are wanted delete [0] from dataset[i][0]
 
-pytorch_dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=True)
-
+# code to load tensor data
+pytorch_dataloader = DataLoader(dataset=dataset_augmented, batch_size=16, shuffle=True)
 

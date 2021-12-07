@@ -25,11 +25,6 @@ class DataFolder(Dataset):
                 self.data += list(zip(files, [index]*len(files)))
             else:
                 files = os.listdir(os.path.join(root_dir,name))
-                # Get the traffic images
-                traffic = list(filter(lambda v: re.match(rf'^sign', v), files))
-                #Get only 100 images per category of CIFAR 100 
-                files = [list(filter(lambda v: re.match(rf'.*_{x}.jpg', v), files))[0:100] for x in range(20)]
-                files = sum(files,[])+traffic
                 self.data += list(zip(files, [index]*len(files)))
                 
     def __len__(self):
@@ -38,7 +33,7 @@ class DataFolder(Dataset):
     def __getitem__(self, index):
         img_file , label = self.data[index]
         root_and_dir = os.path.join(self.root_dir,self.class_names[label])
-        image = np.array(Image.open(os.path.join(root_and_dir,img_file)))
+        image = np.array(Image.open(os.path.join(root_and_dir,img_file)).convert('RGB'))
 
         if self.transform is not None:
             augmentations= self.transform(image=image)

@@ -76,11 +76,16 @@ test_transform = A.Compose(
 )
 
 #Load the datasets 
-train_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\train_data',transform=train_transform)
-test_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\test_data',transform=None)
+# train_dataset = DataFolder(root_directory= r'../train_data',transform=train_transform)
+# test_dataset = DataFolder(root_directory= r'../train_data',transform=None)
+
+train_dataset = DataFolder(root_directory= r'/Users/rinusvangrunsven/Documents/GitHub/DSPA2/datasetactual/train_data',transform=train_transform)
+test_dataset = DataFolder(root_directory= r'/Users/rinusvangrunsven/Documents/GitHub/DSPA2/datasetactual/test_data',transform=None)
 
 batch_size = 64
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 print(len(train_dataset))
 print(len(test_dataset))
+
+# /Users/rinusvangrunsven/Documents/GitHub/DSPA2/dataset/train_data

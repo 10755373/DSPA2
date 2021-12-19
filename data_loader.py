@@ -75,16 +75,49 @@ test_transform = A.Compose(
     ]
 )
 
-#Load the datasets 
-# train_dataset = DataFolder(root_directory= r'../train_data',transform=train_transform)
-# test_dataset = DataFolder(root_directory= r'../train_data',transform=None)
 
-train_dataset = DataFolder(root_directory= r'/Users/rinusvangrunsven/Documents/GitHub/DSPA2/datasetactual/train_data',transform=train_transform)
-test_dataset = DataFolder(root_directory= r'/Users/rinusvangrunsven/Documents/GitHub/DSPA2/datasetactual/test_data',transform=None)
+#Load the datasets 
+train_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\train_data',transform=train_transform)
+test_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\test_data',transform=test_transform)
+#Sampler to correct randomized batch in dataloader
+#list of labels, and class number function 
+
+def classes(dataset):
+    class_cctv =0 
+    class_not_cctv= 0
+    labels_list = []
+    for x, y in dataset:
+        if y ==0:
+            class_cctv  += 1
+            labels_list.append(y)
+        if y==1:
+            class_not_cctv += 1
+            labels_list.append(y)
+    return class_cctv,class_not_cctv,labels_list
+
+#sampler function
+def sampler(class_1,class_2,labels_list):
+    class_total_count = [class_1,class_2]
+    weights_class = 1./torch.tensor(class_total_count, dtype=torch.float) 
+    class_weights_all = weights_class [labels_list]
+    balanced_sampler = WeightedRandomSampler(
+        weights=class_weights_all,
+        num_samples=len(class_weights_all),
+        replacement=True
+    )
+    return balanced_sampler
+
+
+train_data_sampler  = classes(train_dataset)
+test_data_sampler  = classes(test_dataset)
+
+sampler_train = sampler(train_data_sampler[0],train_data_sampler[1],train_data_sampler[2]) 
+sampler_test = sampler(test_data_sampler[0],test_data_sampler[1],test_data_sampler[2])
+
 
 batch_size = 64
-train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size,sampler=sampler_train)
+test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size,sampler = sampler_test)
 print(len(train_dataset))
 print(len(test_dataset))
 

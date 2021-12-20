@@ -1,0 +1,32 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+	<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+
+</head>
+<body>
+<div class="container">
+
+    <!-- The content of the webpage -->
+    <div class="row">
+        <div class="col-">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- The navigation bar -->
+    <nav class="navbar-center fixed-bottom navbar-light bg-light">
+        <a class="navbar-brand" href="#">Fixed bottom</a>
+    </nav>
+</div>
+</body>
+</html>

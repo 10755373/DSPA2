@@ -1,16 +1,11 @@
 from IPython.display import Image 
 from PIL import Image
-from torch.utils.data import Dataset
-from torchvision import transforms
 import albumentations as A 
 from albumentations.pytorch  import ToTensorV2
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 import torch
-from torchvision.utils import make_grid
-from matplotlib import pyplot as plt
 import numpy as np
-import os 
-import re
+import os
 
 class DataFolder(Dataset):
     def __init__(self, root_directory, transform=None):
@@ -19,7 +14,7 @@ class DataFolder(Dataset):
         self.root_directory = root_directory
         self.transform = transform
         self.class_names= os.listdir(root_directory)
-        # Loop through the folders and add labels to it signs:0 , notsigns: 1 
+        # Loop through the folders and add labels to it signs: 0, notsigns: 1
         for index_labels, name in enumerate(self.class_names):
             if name == 'cctvsign':
                 files_data = os.listdir(os.path.join(root_directory,name))
@@ -78,8 +73,8 @@ test_transform = A.Compose(
 
 
 #Load the datasets 
-train_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\train_data',transform=train_transform)
-test_dataset = DataFolder(root_directory= r'C:\Users\Invitado\Documents\Python\DS_MASTER\DSP\dataset\test_data',transform=test_transform)
+train_dataset = DataFolder(root_directory=r'C:\Users\alexa\University\Master\DSP-A2\DSPA2\dataset\train_data',transform=train_transform)
+test_dataset = DataFolder(root_directory=r'C:\Users\alexa\University\Master\DSP-A2\DSPA2\dataset\test_data',transform=test_transform)
 #Sampler to correct randomized batch in dataloader
 #list of labels, and class number function 
 

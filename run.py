@@ -1,7 +1,9 @@
 from flask import Flask, render_template
 
+
 app = Flask(__name__)
 
+# Defines the routes to the webpages.
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -27,4 +29,4 @@ def ethics_paper():
     return render_template("ethics_paper.html")
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

@@ -1,9 +1,8 @@
 /* Adapted from https://stackoverflow.com/questions/52894639/bootstrap-4-1-navbar-max-width-and-auto-margins,
 acessed on 20/12/2021 */
-nav.navbar-nav {
+nav.navbar-center {
     max-width: 200px; /* applying max-width */
     text-align: center !important;
-    background-color: transparent !important;
     background: transparent !important;
     border-color: transparent !important;
     .navbar-collapse {
@@ -15,4 +14,8 @@ nav.navbar-nav {
 .container {
     padding: 10px !important;
     margin: 0px !important;
+}
+
+.body {
+    background-color: blue !important;
 }

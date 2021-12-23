@@ -5,9 +5,6 @@ app = Flask(__name__)
 
 # Defines the routes to the webpages.
 @app.route("/")
-def index():
-    return render_template("index.html")
-
 @app.route("/index.html")
 def home():
     return render_template("index.html")

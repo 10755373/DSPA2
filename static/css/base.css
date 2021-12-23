@@ -2,6 +2,7 @@
 acessed on 20/12/2021 */
 nav.navbar-center {
     max-width: 200px; /* applying max-width */
+    padding: 0px !important;
     text-align: center !important;
     background: transparent !important;
     border-color: transparent !important;
@@ -9,6 +10,10 @@ nav.navbar-center {
         justify-content : center; /* center the elements in the block if there is flex */
         -webkit-justify-content : center; /* make it works on some navigators */
     }
+}
+
+.nav>li>a {
+    padding: 5px;
 }
 
 .container {

@@ -7,5 +7,50 @@
 
 <!-- This section will contain the contents displayed on upload.html -->
 {% block content %}
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8  offset-lg-2">
+    
+                
+            <h2 class="mt-5">Take a picture of a CCTV SIGN </h2>
+            <form method="post" action="{{ url_for('tasks') }}">
+            <input type="submit" class="btn btn-info" value="Stop/Start" name="stop" />
+            <input type="submit" class="btn btn-info" value="Capture" name="click"/>
+            </form>
+            <img src="{{ url_for('video_feed') }}"  class="w3-card-4" height="80%">
+            
+            
+                
+            <h2>Upload CCTV SIGN</h2>
+            <p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
+            </p>
+            {% if filename %}
+                <div>
+                    <img src="{{ url_for('display_image', filename=filename) }}">
+                </div>
+            {% endif %}
+            <form method="post" action="/" enctype="multipart/form-data">
+                <dl >
+                    <p >
+                        <input type="file" name="file" autocomplete="off" required>
+                    </p>
+                </dl>
+                <p>
+                    <input type="submit" class="btn btn-info" value="Submit" >
+                </p>
+        </div>
+    </div>
+</div>
+</body>
 
 {% endblock %}

@@ -1,7 +1,43 @@
-from flask import Flask, render_template
+#Uploading page adapted from https://github.com/hemanth-nag/Camera_Flask_App/blob/main/camera_flask_app.py  
+# and https://roytuts.com/upload-and-display-image-using-python-flask/, accesed 2022/07/01
+
+from flask import Flask, render_template, Response, request,flash, redirect, url_for
+import cv2
+import datetime
+import os
+import geocoder
+from metadata import PNG_to_JPG,metadata 
+import urllib.request
+from werkzeug.utils import secure_filename
+
+
+
+# Upload code
+# Saving pics from file
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+#make shots directory to save pics
+global capture,switch 
+capture=0
+switch=0
+# get the coordinates of ip address
+g = geocoder.ip('me')
+#set uploading folder where the files are needed 
+UPLOAD_FOLDER = r'DS_MASTER\DSP\DSPA2-main\static\uploads'
 
 
 app = Flask(__name__)
+
+#Uploading code
+app.secret_key = "secret key"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+#Opens camara
+camera = cv2.VideoCapture(1)
+
 
 # Defines the routes to the webpages.
 @app.route("/")
@@ -17,9 +53,91 @@ def gallery():
 def map():
     return render_template("map.html")
 
+
+#Uploaging page code
+# generate frame by frame from camera
+def gen_frames():  
+    global out, capture,rec_frame
+    while True:
+        success, frame = camera.read() 
+        if success: 
+            if(capture):
+                #Taking pic from webcam 
+                capture=0
+                now = datetime.datetime.now()
+                
+                p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.png".format(str(now).replace(":",''))])
+                cv2.imwrite(p, frame)
+                p_new = os.path.sep.join([UPLOAD_FOLDER, "camshot_new_{}.jpg".format(str(now).replace(":",''))])
+                p_metadata = os.path.sep.join([UPLOAD_FOLDER, "camshot_meta_{}.jpg".format(str(now).replace(":",''))])
+                PNG_to_JPG(p,p_new)
+                metadata(p_new,g.latlng[0],g.latlng[1],p_metadata)
+                
+            try:
+                ret, buffer = cv2.imencode('.jpg', cv2.flip(frame,1))
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            except Exception as e:
+                pass
+                
+        else:
+            pass
+
 @app.route("/upload.html")
 def upload():
     return render_template("upload.html")
+# Displays the camara 
+@app.route("/video_feed")
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+# Buttons functionality
+@app.route("/requests",methods=['POST','GET'])
+def tasks():
+    global switch,camera
+    if request.method == 'POST':
+        if request.form.get('click') == 'Capture':
+            global capture
+            capture=1
+
+        elif  request.form.get('stop') == 'Stop/Start':
+      
+            if(switch==1):
+                switch=0
+                camera.release()
+                  
+            else:
+                camera = cv2.VideoCapture(0)
+                switch=1
+            
+                 
+    elif request.method=='GET':
+        return render_template('upload.html')
+    return render_template('upload.html')
+
+#Upload a pic directly from folder
+@app.route('/', methods=['POST'])
+def upload_image():
+	if 'file' not in request.files:
+		flash('No file part')
+		return redirect(request.url)
+	file = request.files['file']
+	if file.filename == '':
+		flash('No image selected for uploading')
+		return redirect(request.url)
+	if file and allowed_file(file.filename):
+		filename = secure_filename(file.filename)
+		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		flash('Image successfully uploaded and displayed below')
+		return render_template('upload.html', filename=filename)
+	else:
+		flash('Allowed image types are -> png, jpg, jpeg, gif')
+		return redirect(request.url)
+
+@app.route('/display/<filename>')
+def display_image(filename):
+	#print('display_image filename: ' + filename)
+	return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
 @app.route("/ethics_paper.html")
 def ethics_paper():
@@ -27,3 +145,5 @@ def ethics_paper():
 
 if __name__ == "__main__":
     app.run(debug=True)
+#closes camara
+camera.release()

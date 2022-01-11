@@ -15,10 +15,10 @@ import requests
 
 # Upload code
 # Saving pics from file
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+#ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+#def allowed_file(filename):
+#	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #make shots directory to save pics
 global capture,switch 
@@ -47,9 +47,9 @@ longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPositio
 app = Flask(__name__)
 
 #Uploading code
-app.secret_key = "secret key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+#app.secret_key = "secret key"
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Opens camara
 camera = cv2.VideoCapture(1)
 
@@ -81,7 +81,10 @@ def gen_frames():
                 #Taking pic from webcam 
                 capture=0
                 now = datetime.datetime.now()
-                
+                #square pic
+		height,width = frame.shape[0],frame.shape[1]
+                frame = frame[round(height*0.25):round(height*0.25)+ round(width*0.35), round(width*0.40):round(width*0.40)+ round(width*0.35)]
+		
                 p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.png".format(str(now).replace(":",''))])
                 cv2.imwrite(p, frame)
                 p_new = os.path.sep.join([UPLOAD_FOLDER, "camshot_new_{}.jpg".format(str(now).replace(":",''))])
@@ -131,29 +134,6 @@ def tasks():
         return render_template('upload.html')
     return render_template('upload.html')
 
-#Upload a pic directly from folder
-@app.route('/', methods=['POST'])
-def upload_image():
-	if 'file' not in request.files:
-		flash('No file part')
-		return redirect(request.url)
-	file = request.files['file']
-	if file.filename == '':
-		flash('No image selected for uploading')
-		return redirect(request.url)
-	if file and allowed_file(file.filename):
-		filename = secure_filename(file.filename)
-		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-		flash('Image successfully uploaded and displayed below')
-		return render_template('upload.html', filename=filename)
-	else:
-		flash('Allowed image types are -> png, jpg, jpeg, gif')
-		return redirect(request.url)
-
-@app.route('/display/<filename>')
-def display_image(filename):
-	#print('display_image filename: ' + filename)
-	return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
 @app.route("/ethics_paper.html")
 def ethics_paper():

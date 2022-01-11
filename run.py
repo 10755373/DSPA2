@@ -81,10 +81,9 @@ def gen_frames():
                 #Taking pic from webcam 
                 capture=0
                 now = datetime.datetime.now()
-                #square pic
-		height,width = frame.shape[0],frame.shape[1]
+                height,width = frame.shape[0],frame.shape[1]
                 frame = frame[round(height*0.25):round(height*0.25)+ round(width*0.35), round(width*0.40):round(width*0.40)+ round(width*0.35)]
-		
+                
                 p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.png".format(str(now).replace(":",''))])
                 cv2.imwrite(p, frame)
                 p_new = os.path.sep.join([UPLOAD_FOLDER, "camshot_new_{}.jpg".format(str(now).replace(":",''))])
@@ -92,13 +91,12 @@ def gen_frames():
                 PNG_to_JPG(p,p_new)
                 metadata(p_new,g.latlng[0],g.latlng[1],p_metadata)
                 
-            try:
-                ret, buffer = cv2.imencode('.jpg', cv2.flip(frame,1))
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            except Exception as e:
-                pass
+            
+            ret, buffer = cv2.imencode('.jpg', cv2.flip(frame,1))
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+           
                 
         else:
             pass

@@ -9,6 +9,7 @@ import geocoder
 from metadata import PNG_to_JPG,metadata 
 import urllib.request
 from werkzeug.utils import secure_filename
+import requests
 
 
 
@@ -27,6 +28,20 @@ switch=0
 g = geocoder.ip('me')
 #set uploading folder where the files are needed 
 UPLOAD_FOLDER = r'DS_MASTER\DSP\DSPA2-main\static\uploads'
+
+
+URL = "https://geocoder.api.here.com/6.2/geocode.json"
+location = input("Enter the location here: ")
+app_ID = 'LVzP8znwHiItQlnZsd3g'
+app_CODE = 'ufbceoJhaG-H270WOS1rww'
+PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':location} 
+
+# sending get request and saving the response as response object 
+r = requests.get(url = URL, params = PARAMS) 
+data = r.json()
+
+latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
+longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
 
 app = Flask(__name__)
@@ -51,7 +66,8 @@ def gallery():
 
 @app.route("/map.html")
 def map():
-    return render_template("map.html")
+    # return render_template("map.html")
+	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE,latitude=latitude,longitude=longitude)
 
 
 #Uploaging page code

@@ -4,8 +4,137 @@
 {% extends "base.html" %}
 {% block title %}Gallery{% endblock %}
 
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <title>Photo Gallery</title>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <th>
+                   <th>Photo Gallery</th>>
+                </th>
+            </tr>
+        </table>
+    </body>
+</html> -->
+
+
+
 
 <!-- This section will contain the contents displayed on gallery.html -->
 {% block content %}
 
+
+ 
+    <!-- <title>Lightbox Gallery</title> -->
+    <!-- <link rel="stylesheet"
+          type="text/css"
+          href="lightbox2/dist/css/lightbox.min.css">
+    <script src=
+"lightbox2/dist/js/lightbox-plus-jquery.min.js">
+    </script> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='lightbox2/dist/css/lightbox.min.css') }}"> -->
+    <!-- <script src="{{url_for('static', filename='lightbox2/dist/js/lightbox-plus-jquery.min.js')}}"></script> -->
+
+    <!-- <style src="{{url_for('static', filename='/css/gallery.css')}}"></style> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}"> -->
+ 
+    <!DOCTYPE html>
+    <html>
+     
+    <head>
+        <title>Lightbox Gallery</title>
+        <!-- <link rel="stylesheet"
+              type="text/css"
+              href="lightbox2/dist/css/lightbox.min.css"> -->
+        <!-- <script src=
+    "lightbox2/dist/js/lightbox-plus-jquery.min.js">
+        </script> -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='lightbox2/dist/css/lightbox.min.css') }}">
+        <script src="{{url_for('static', filename='lightbox2/dist/js/lightbox-plus-jquery.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
+
+    </head>
+     
+    <body>
+        <h2>Image gallery</h2>
+        <b>Overview of all images collected by 'Bigger brother is watching you'</b>
+        <div class="grid" id="galleryimages" data-lightbox="mygallery">
+        <!-- <div class="grid"> -->
+
+            <!-- <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142254/html9.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143104/html10.png">
+            </a>
+            <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142245/CSS8.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143101/CSS9.png">
+            </a>
+            <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142240/Bootstrap5.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143058/Bootstrap6.png">
+            </a>
+            <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142257/JavaScript2.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143106/JavaScript3.png">
+            </a>
+            <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142303/jquery.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143108/jquery4.png">
+            </a>
+            <a href=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318142309/php7.png"
+               data-lightbox="mygallery">
+                <img src=
+    "https://media.geeksforgeeks.org/wp-content/uploads/20200318143112/php8.png">
+            </a> -->
+
+        </div>
+        <script src="{{url_for('static', filename='js/gallery.js')}}"></script>
+
+
+    </body>
+     
+    </html>
+
 {% endblock %}
+
+importing image in code <!-- https://www.geeksforgeeks.org/how-to-create-responsive-image-gallery-using-html-css-jquery-and-bootstrap/ -->
+
+same but too complicated to understand <!-- https://codesandbox.io/s/react-imgix-responsive-gallery-vuqz8?file=/src/Gallery.js -->
+
+same gallery, but without importing part: <!-- https://www.geeksforgeeks.org/how-to-create-image-lightbox-gallery-using-html-css-and-javascript/ -->
+
+interesting, basic and understandable, but without importing part
+<!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_tab_img_gallery -->
+
+less interesting
+<!-- https://jsfiddle.net/patelsumit5192/d1ojLbkt/ -->
+
+------------------
+
+for resizing images  <!-- https://www.freecodecamp.org/news/css-responsive-image-tutorial/ -->
+
+uploading images 
+<!-- https://stackoverflow.com/questions/29923043/upload-images-to-image-gallery-using-html-css-and-javascript -->
+
+making gallery
+<!-- https://www.youtube.com/watch?v=cPltsWlCdu8 -->
+
+making a map
+<!-- https://developer.here.com/blog/here-map-with-python-flask -->
+
+

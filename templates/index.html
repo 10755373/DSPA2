@@ -7,22 +7,48 @@
 
 <!-- This section will contain the contents displayed on index.html -->
 {% block content %}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut turpis scelerisque, gravida nulla non, malesuada eros. Proin dignissim justo risus, sit amet tristique dolor placerat at. Pellentesque convallis, ligula eu mollis scelerisque, lorem diam scelerisque mauris, sed facilisis sapien velit vitae mi. Maecenas et dignissim nibh. In scelerisque felis non justo blandit varius. Donec neque nulla, consequat ut arcu et, bibendum sollicitudin arcu. Proin iaculis vitae sem eu finibus. Nulla nec sem tortor. Duis in lectus sem. Nunc vitae elementum metus.
 
-Integer sit amet dui elit. Ut venenatis auctor volutpat. Praesent eget elit ac nunc pharetra rhoncus ut consectetur eros. Vivamus vestibulum quis nisl consequat dictum. Vestibulum in sodales erat. Aliquam vehicula porta tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas purus neque, condimentum ut suscipit nec, dictum nec nisi. Integer nunc dui, consequat a vulputate sed, sagittis vitae tellus. Nunc faucibus sit amet sem vitae euismod. Etiam sed tortor vel tortor lacinia ullamcorper in et est. Nulla eget nibh et est viverra tempus nec ut libero. Proin eget mi consequat, suscipit justo at, elementum sapien. Ut tellus turpis, gravida eu eleifend eget, volutpat in ligula. Nunc nec nibh id odio ornare ultricies ac vitae ipsum. Donec ut accumsan nunc.
+<div class="row">
+    <img class="center-fit" src="{{ url_for('static', filename='img/sign-of-signs.jpeg') }}" alt="CCTV sign">
+</div>
 
-Nunc sed risus dui. Donec faucibus enim sed ante dictum, eget tempus ipsum tempor. Aliquam efficitur arcu ac urna placerat, ac lobortis augue sagittis. Donec eget finibus nibh. Suspendisse finibus ac massa id accumsan. Integer iaculis faucibus lacus eget rhoncus. Ut vehicula nunc a cursus sollicitudin. Aenean bibendum, massa at suscipit luctus, erat dolor dignissim ipsum, at tempus ipsum sapien suscipit nisi. Vivamus tincidunt ligula quis ultrices interdum. Ut eros elit, lacinia tincidunt libero id, ultrices dignissim felis. Nunc convallis tortor quis pretium semper. Nulla facilisi. Morbi eget nibh id ipsum maximus ornare. Aliquam ut lacus eget nisl lobortis pretium.
+<div class = "row">
+    <div class="col-sm-12 add-margin-20">
+        <h1>Bigger Brother is watching you!</h1>
+        </br>
+        </br>
+        <p class="text-sm-start">
+            Do you feel like you are being watched?
+        </p>
 
-Suspendisse tincidunt sagittis nibh, a consequat dui. In et blandit sapien. Vivamus ut odio eget lorem imperdiet placerat et at nibh. Fusce neque enim, facilisis et neque vitae, vulputate condimentum turpis. Morbi pretium sit amet dui vitae euismod. Nunc congue nunc nec malesuada fermentum. Phasellus quis iaculis nisi. Sed ut hendrerit eros, id interdum nisi. Maecenas vehicula feugiat volutpat.
+        <p> You can find out where CCTV signs or cameras have been spotted by going to
+            <img src="{{ url_for('static', filename='img/map.png') }}" height="20px" width="20px" alt="Map">
+            and looking at the map. The pinpoints are the individual CCTV signs already photographed and uploaded by people.
+        </p>
 
-Curabitur euismod orci nec augue porta, ac hendrerit tellus malesuada. Proin bibendum ligula id libero dapibus, nec posuere erat vehicula. Aliquam vel lacinia lacus. Praesent et elit vel sapien elementum molestie vel pulvinar ipsum. Sed sed pharetra libero, non gravida arcu. In sed purus facilisis, tincidunt nunc at, aliquam felis. Donec a iaculis urna, quis scelerisque felis. Etiam interdum suscipit ornare. Morbi dignissim magna sed risus dapibus dignissim. Phasellus pharetra sapien eget mauris fringilla consectetur. Mauris aliquet velit ut ante mattis euismod. In porta odio nec nisi congue, sed feugiat lorem malesuada. Etiam malesuada urna nec sapien pretium, nec convallis turpis suscipit.
+        <p>
+            If you just want to look at a gallery of all the pictures that have been taken you can go to
+            <img src="{{ url_for('static', filename='img/gallery.png') }}" height="20px" width="20px" alt="Gallery">.
+        </p>
 
-In nec pulvinar tellus. Sed bibendum blandit pretium. Aliquam erat volutpat. Ut luctus hendrerit augue, id iaculis augue ullamcorper non. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam blandit, sem vel efficitur fringilla, eros ligula iaculis enim, ac pulvinar est velit nec leo. Nullam porttitor ac tellus facilisis ullamcorper. Vestibulum erat diam, condimentum a sollicitudin id, dapibus quis sem. Duis arcu augue, viverra at mi ac, laoreet viverra dui. Curabitur non elit diam. Pellentesque tristique sodales libero, sed pulvinar turpis facilisis ut. Vivamus id leo erat.
+        <p>
+            You can find more about CCTV surveillance and our motivation by reading our essay under
+            <img src="{{ url_for('static', filename='img/paper.png') }}" height="20px" width="20px" alt="Paper">.
+        </p>
 
-Quisque in leo diam. In lobortis metus est, et rutrum nulla sodales ornare. Nam condimentum suscipit leo. Ut et justo ligula. Etiam at ante ullamcorper, sagittis velit nec, blandit orci. Aenean quis eros vel arcu eleifend efficitur. Etiam iaculis tempus varius. Duis suscipit eu felis sit amet condimentum. Praesent pharetra laoreet risus, a sodales nisl semper interdum. Aliquam euismod erat vel augue rutrum, et vestibulum urna congue.
+        <p>
+            Ready to start watching Big Brother yourself? You can help us to surveil Big Brother by
+            taking photo's of CCTV signs or cameras you come across
+            in daily life. To take a photo go to the
+            <img src="{{ url_for('static', filename='img/camera.png') }}" height="20px" width="20px" alt="Upload">
+            page and press ... .
+        </p>
 
-In scelerisque porta mi at molestie. Etiam bibendum venenatis sapien, sed convallis libero dictum ornare. Mauris nibh purus, fermentum non fermentum ut, aliquam sed sem. In scelerisque placerat vulputate. Suspendisse ac ipsum at orci tincidunt feugiat nec eu massa. Nunc nec mollis ligula. In scelerisque est eget urna scelerisque euismod. Aliquam auctor non ligula vel cursus. Vivamus fermentum ultrices enim quis scelerisque. Quisque vitae mauris gravida, convallis tellus eu, ultricies risus.
-
-Ut quis maximus dui. Morbi in odio neque. Donec quis facilisis erat. Nunc tristique nisl a volutpat laoreet. Aenean hendrerit enim sed volutpat pellentesque. Nunc eu risus metus. Integer aliquam posuere quam, ut congue libero fermentum ac.
+        <p>
+            You can get back to this page any time by pressing
+            <img src="{{ url_for('static', filename='img/info.png') }}" height="20px" width="20px" alt="Home">.
+        </p>
+    </div>
+</div>
 
 {% endblock %}

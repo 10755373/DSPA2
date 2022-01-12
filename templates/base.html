@@ -14,14 +14,10 @@
 
 </head>
 <body>
-<div class="container">
+<div class="container remove-margin-and-padding">
 
     <!-- The content of the webpage -->
-    <div class="row">
-        <div class="col-">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+    {% block content %}{% endblock %}
 
     <!-- The navigation bar -->
     <nav class="navbar-center navbar-expand-xs mx-auto fixed-bottom">

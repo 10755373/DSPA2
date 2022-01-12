@@ -8,11 +8,11 @@
 <!-- This section will contain the contents displayed on index.html -->
 {% block content %}
 
-<div class="row">
+<div class="row remove-margin-and-padding">
     <img class="center-fit" src="{{ url_for('static', filename='img/sign-of-signs.jpeg') }}" alt="CCTV sign">
 </div>
 
-<div class = "row">
+<div class = "row remove-margin-and-padding">
     <div class="col-sm-12 add-margin-20">
         <h1>Bigger Brother is watching you!</h1>
         </br>
@@ -21,6 +21,7 @@
             Do you feel like you are being watched?
         </p>
 
+        <!-- Website tutorial -->
         <p> You can find out where CCTV signs or cameras have been spotted by going to
             <img src="{{ url_for('static', filename='img/map.png') }}" height="20px" width="20px" alt="Map">
             and looking at the map. The pinpoints are the individual CCTV signs already photographed and uploaded by people.

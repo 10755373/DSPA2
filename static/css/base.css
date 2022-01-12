@@ -9,6 +9,10 @@ nav.navbar-center {
     }
 }
 
+.nav {
+    justify-content: center;
+}
+
 .nav>li>a {
     padding: 5px;
 }
@@ -28,3 +32,7 @@ nav.navbar-center {
     margin: 20px;
 }
 
+.remove-margin-and-padding {
+    margin: 0px;
+    padding: 0px;
+}

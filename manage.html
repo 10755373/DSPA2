@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save & load image on Firebase Storage</title>
+    <style>
+        img{
+            height: 200px;
+            width: 200px;
+            border: 2px black solid;
+        }
+    </style>
+</head>
+<body>
+
+    <label> Imagege Name</label> <input type = "text" id = "namebox"> <label id= "extlab"></label> <br><br>
+    <img id ="myimg"> <label id="upprogress"></label> <br><br>
+    <button id="selbtn">Select Image</button>
+    <button id="upbtn">Upload Image</button>
+    <button id="downbtn">Retrieve Image</button>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
+          authDomain: "dspa2-89403.firebaseapp.com",
+          databaseURL: "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "dspa2-89403",
+          storageBucket: "dspa2-89403.appspot.com",
+          messagingSenderId: "1067069276652",
+          appId: "1:1067069276652:web:a7905bfd04c842886780c9",
+          measurementId: "G-9LFKZ5YGHG"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
+
+        // Initialize Realtime Firebase
+        import { getDatabase, ref, set, child, get, update, remove } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"
+        const realdb = getDatabase();
+
+        // variables & references
+
+        var files = [];
+        var reader = new FileReader ();
+
+        var namebox = document.getElementById('namebox')
+        var extlab = document.getElementById('extlab')
+        var myimg = document.getElementById('myimg')
+        var proglab = document.getElementById('upprogress')
+        var SelBtn = document.getElementById('selbtn')
+        var UpBtn = document.getElementById('upbtn')
+        var DownBtn = document.getElementById('downbtn')
+
+        var input = document.createElement('input')
+        input.type = 'file';
+
+        input.onchange = e =>{
+            files = e.target.files;
+
+            var extention = GetFileExt(files[0]);
+            var name = GetFileName(files[0]);
+            
+            namebox.value= name;
+            extlab.innerHTML = extention;
+
+            reader.readAsDataURL(files[0]);
+        }
+
+        reader.onload = function(){
+            myimg.src = reader.result;
+        }
+
+        // selection
+
+        SelBtn.onclick = function(){
+            input.click();
+        }
+
+        function GetFileExt(file){
+            var temp = file.name.split('.');
+            var ext = temp.slice((temp.length-1),(temp.length));
+            return '.' + ext[0];
+        }
+
+        function GetFileName(file){
+            var temp = file.name.split('.');
+            var fname = temp.slice(0,-1).join('.');
+            return fname;
+        }
+
+        // upload process]
+
+        async function UploadProcess(){
+            var ImgToUpload = files[0];
+            
+            var ImgName = namebox.value + extlab.innerHTML;
+
+            if(!ValidateName()){
+                alert('name cannot contain ".", "#", "$", "[", "]"');
+                return;
+            }
+
+            const metaData = {
+                contentType: ImgToUpload.type
+            }
+
+            const storage = getStorage();
+
+            const stroageRef = sRef(storage, "Images/"+ImgName);
+
+            const UploadTask = uploadBytesResumable(stroageRef, ImgToUpload, metaData);
+
+            UploadTask.on('state-changed', (snapshot)=>{
+                var progess = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                proglab.innerHTML = "Upload "+progess + "%";
+            },
+            
+            (error) =>{
+                alert("error: image not uploaded!");
+            },
+
+            ()=>{
+                getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+                    console.log(downloadURL);
+                });
+            }
+            );
+        }
+
+        // functions for realtime database
+
+        function SaveURLtoRealtimDB(URL){
+            var name = namebox.value;
+            var ext = extlab.innerHTML;
+
+            set(ref(realdb, "ImagesLinks/"+name),{
+                ImageName: (name+ext),
+                ImageUrl: URL
+            });
+        }
+
+        function GetURLtoRealtimDB(){
+            var name = namebox.value;
+            var dbRef = ref(realdb);
+
+            get(child(dbRef, "ImagesLinks/"+name)).then((snapshot)=>{
+                if(snapshot.exists()){
+                    myimg.src = snapshot.val().ImgUrl;
+                }
+            })
+        }
+
+        // can't contain any signs
+        function ValidateName(){
+            var regex = /[\.#$\[\]]/
+            return !(regex.test(namebox.value));
+        }
+
+
+        UpBtn.onclick = UploadProcess;
+        DownBtn.onclick = GetUrlfromRealtimDB;
+
+      </script>
+
+</body>
+</html>
+
+<!-- https://www.geeksforgeeks.org/create-a-website-using-html-css-and-javascript-that-stores-data-in-firebase/ -->
+    <!-- https://www.youtube.com/watch?v=-UOkri_WNWQ -->

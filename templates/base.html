@@ -9,9 +9,12 @@
     <!-- Bootstrap core CSS -->
 	<link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS Stylesheet -->
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/upload.css') }}">
+    {% block extraStylesheets %}{% endblock %}
+
+    <!-- JavaScripts -->
+    <script src="{{url_for('static', filename='lightbox2/dist/js/lightbox-plus-jquery.min.js')}}"></script>
 
 </head>
 <body>

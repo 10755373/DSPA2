@@ -1,14 +1,12 @@
 #Uploading page adapted from https://github.com/hemanth-nag/Camera_Flask_App/blob/main/camera_flask_app.py  
 # and https://roytuts.com/upload-and-display-image-using-python-flask/, accesed 2022/07/01
 
-from flask import Flask, render_template, Response, request,flash, redirect, url_for
+from flask import Flask, render_template, Response, request
 import cv2
 import datetime
 import os
 import geocoder
-from metadata import PNG_to_JPG,metadata 
-import urllib.request
-from werkzeug.utils import secure_filename
+from metadata import PNG_to_JPG,metadata
 import requests
 
 
@@ -24,17 +22,18 @@ import requests
 global capture,switch 
 capture=0
 switch=0
+
 # get the coordinates of ip address
 g = geocoder.ip('me')
+
 #set uploading folder where the files are needed 
 UPLOAD_FOLDER = r'DS_MASTER\DSP\DSPA2-main\static\uploads'
 
 
 URL = "https://geocoder.api.here.com/6.2/geocode.json"
-location = input("Enter the location here: ")
 app_ID = 'LVzP8znwHiItQlnZsd3g'
 app_CODE = 'ufbceoJhaG-H270WOS1rww'
-PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':location} 
+PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':"amsterdam"}
 
 # sending get request and saving the response as response object 
 r = requests.get(url = URL, params = PARAMS) 
@@ -139,5 +138,6 @@ def ethics_paper():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 #closes camara
 camera.release()

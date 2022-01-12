@@ -9,6 +9,12 @@ import geocoder
 from metadata import PNG_to_JPG,metadata
 import requests
 
+import torch
+from torchvision import transforms
+import albumentations as A 
+from albumentations.pytorch import ToTensorV2
+from PIL import Image
+import numpy
 
 
 # Upload code
@@ -19,7 +25,7 @@ import requests
 #	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #make shots directory to save pics
-global capture,switch 
+global capture,switch,model,transform,device 
 capture=0
 switch=0
 
@@ -27,7 +33,7 @@ switch=0
 g = geocoder.ip('me')
 
 #set uploading folder where the files are needed 
-UPLOAD_FOLDER = r'DS_MASTER\DSP\DSPA2-main\static\uploads'
+UPLOAD_FOLDER = r'.\static\uploads'
 
 
 URL = "https://geocoder.api.here.com/6.2/geocode.json"
@@ -42,13 +48,28 @@ data = r.json()
 latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
 longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model = torch.load('./models/resnet/resnet18_pretrained.pth')
+model.eval()
+transform = A.Compose(
+    [
+        A.Resize(35,35),
+        A.Normalize(
+            mean=(0,0,0),
+            std =(1,1,1),
+            max_pixel_value=225,
+        p=1),
+        
+        ToTensorV2(),
+    ]
+)
 
 app = Flask(__name__)
 
 #Uploading code
-#app.secret_key = "secret key"
-#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-#app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.secret_key = "secret key"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Opens camara
 camera = cv2.VideoCapture(1)
 
@@ -82,14 +103,17 @@ def gen_frames():
                 now = datetime.datetime.now()
                 height,width = frame.shape[0],frame.shape[1]
                 frame = frame[round(height*0.25):round(height*0.25)+ round(width*0.35), round(width*0.40):round(width*0.40)+ round(width*0.35)]
-                
-                p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.png".format(str(now).replace(":",''))])
-                cv2.imwrite(p, frame)
-                p_new = os.path.sep.join([UPLOAD_FOLDER, "camshot_new_{}.jpg".format(str(now).replace(":",''))])
-                p_metadata = os.path.sep.join([UPLOAD_FOLDER, "camshot_meta_{}.jpg".format(str(now).replace(":",''))])
-                PNG_to_JPG(p,p_new)
-                metadata(p_new,g.latlng[0],g.latlng[1],p_metadata)
-                
+                img = transform(image=numpy.array(frame))['image'].to(device).unsqueeze(0)
+                if get_prediction(img, model)[0].item() == 0:
+    
+                    p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.png".format(str(now).replace(":",''))])
+                    cv2.imwrite(p, frame)
+                    p_new = os.path.sep.join([UPLOAD_FOLDER, "camshot_new_{}.jpg".format(str(now).replace(":",''))])
+                    p_metadata = os.path.sep.join([UPLOAD_FOLDER, "camshot_meta_{}.jpg".format(str(now).replace(":",''))])
+                    PNG_to_JPG(p,p_new)
+                    metadata(p_new,g.latlng[0],g.latlng[1],p_metadata)
+                else:
+                    pass
             
             ret, buffer = cv2.imencode('.jpg', cv2.flip(frame,1))
             frame = buffer.tobytes()
@@ -100,6 +124,13 @@ def gen_frames():
         else:
             pass
 
+def get_prediction(image, model):
+    with torch.no_grad():
+        output = model(image)
+        # the class with the highest energy is what we choose as prediction
+        _, predicted = torch.max(output.data, 1)
+        return predicted
+    
 @app.route("/upload.html")
 def upload():
     return render_template("upload.html")
@@ -112,7 +143,7 @@ def video_feed():
 def tasks():
     global switch,camera
     if request.method == 'POST':
-        if request.form.get('click') == 'Capture':
+        if request.form.get('click') == 'Take CCTV':
             global capture
             capture=1
 

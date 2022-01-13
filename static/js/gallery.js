@@ -1,3 +1,30 @@
+// The web app's Firebase configuration
+//const firebaseConfig = {
+//    apiKey: "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
+//    authDomain: "dspa2-89403.firebaseapp.com",
+//    databaseURL: "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
+//    projectId: "dspa2-89403",
+//    storageBucket: "dspa2-89403.appspot.com",
+//    messagingSenderId: "1067069276652",
+//    appId: "1:1067069276652:web:a7905bfd04c842886780c9",
+//    measurementId: "G-9LFKZ5YGHG"
+//};
+//
+//// Initialize Firebase
+//const firebase = initializeApp(firebaseConfig);
+//const analytics = getAnalytics(firebase);
+//
+//import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
+
+//const storage = getStorage()
+//console.log("Hello")
+//firebase.storage().ref("Images/").listAll().then(function(result) {
+//      result.items.forEach(function(imageRef) {
+//        console.log(imageRef)
+//      });
+//    }).catch(function(error) {
+//      console.log("error")
+//    });
 
 var URLs = [
   "https://media.geeksforgeeks.org/wp-content/uploads/20200318142254/html9.png",

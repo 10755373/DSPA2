@@ -3,14 +3,6 @@
 {% extends "base.html" %}
 {% block title %}Map{% endblock %}
 
-{% block extraStylesheets %}
-  <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-  <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-  <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-  <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-{% endblock %}
-
-
 {% block content %}
 <div style="width: 100vw; height: 100vh" id="mapContainer"></div>
 <!-- <script src="{{url_for('static', filename='js/map.js')}}"></script> -->

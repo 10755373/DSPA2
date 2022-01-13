@@ -3,19 +3,13 @@
 
 {% extends "base.html" %}
 {% block title %}Gallery{% endblock %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='lightbox2/dist/css/lightbox.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
-{% block extraStylesheets %}
-
-{% endblock %}
 
 <!-- This section will contain the contents displayed on gallery.html -->
 {% block content %}
 <h2>GeeksforGeeks</h2>
 <b>A Computer Science Portal for Geeks</b>
 <div class="grid">
-
-<script src="{{url_for('static', filename='js/gallery.js')}}"></script>
+    <script src="{{url_for('static', filename='js/gallery.js')}}"></script>
 </div>
 
 {% endblock %}

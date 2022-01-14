@@ -71,7 +71,7 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Opens camara
-camera = cv2.VideoCapture(1)
+#camera = cv2.VideoCapture(1)
 
 
 # Defines the routes to the webpages.
@@ -92,6 +92,7 @@ def map():
 
 #Uploaging page code
 # generate frame by frame from camera
+'''
 def gen_frames():  
     global out, capture,rec_frame
     while True:
@@ -138,15 +139,36 @@ def get_prediction(image, model):
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(output.data, 1)
         return predicted
+'''
     
 @app.route("/upload.html")
 def upload():
     return render_template("upload.html")
+
+@app.route('/photo', methods=['GET', 'POST'])
+def photo_1():
+    if request.method == 'POST':
+        #fs = request.files['snap'] # it raise error when there is no `snap` in form
+        fs = request.files.get('snap')
+        print(type(fs))
+        if fs: 
+            print('FileStorage:', fs)
+            print('filename:', fs.filename)
+          
+            now = datetime.datetime.now()
+            p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.jpg".format(str(now).replace(":",''))])
+            fs.save(p)
+            return 'Got Snap!' 
+        else: 
+            return 'You forgot Snap!'
+
+'''
 # Displays the camara 
 @app.route("/video_feed")
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 # Buttons functionality
+
 @app.route("/requests",methods=['POST','GET'])
 def tasks():
     global switch,camera
@@ -169,7 +191,7 @@ def tasks():
     elif request.method=='GET':
         return render_template('upload.html')
     return render_template('upload.html')
-
+'''
 
 @app.route("/ethics_paper.html")
 def ethics_paper():
@@ -179,4 +201,4 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 #closes camara
-camera.release()
+#camera.release()

@@ -1,30 +1,49 @@
-// The web app's Firebase configuration
-//const firebaseConfig = {
-//    apiKey: "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
-//    authDomain: "dspa2-89403.firebaseapp.com",
-//    databaseURL: "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
-//    projectId: "dspa2-89403",
-//    storageBucket: "dspa2-89403.appspot.com",
-//    messagingSenderId: "1067069276652",
-//    appId: "1:1067069276652:web:a7905bfd04c842886780c9",
-//    measurementId: "G-9LFKZ5YGHG"
-//};
-//
-//// Initialize Firebase
-//const firebase = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(firebase);
-//
-//import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
+// Necessary import statements
+import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+import {getAnalytics} from "https://www.gstatic.com/firebasejs/9.6.2/firebase-analytics.js";
+import { getStorage, ref, listAll, list, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
 
-//const storage = getStorage()
-//console.log("Hello")
-//firebase.storage().ref("Images/").listAll().then(function(result) {
-//      result.items.forEach(function(imageRef) {
-//        console.log(imageRef)
-//      });
-//    }).catch(function(error) {
-//      console.log("error")
-//    });
+
+// The web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
+    authDomain: "dspa2-89403.firebaseapp.com",
+    databaseURL: "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "dspa2-89403",
+    storageBucket: "dspa2-89403.appspot.com",
+    messagingSenderId: "1067069276652",
+    appId: "1:1067069276652:web:a7905bfd04c842886780c9",
+    measurementId: "G-9LFKZ5YGHG"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const storage = getStorage();
+const storageRef = ref(storage, "Images/");
+
+var URLs = [];
+
+// Find all the prefixes and items.
+listAll(storageRef)
+    .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        });
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+//          console.log("itemref: ", itemRef);
+          getDownloadURL(itemRef).then((url) => {
+            console.log("download url: " + url);
+            URLs.push(url);
+          })
+        });
+    }).catch((error) => {
+        console.log("error")
+    });
+
+console.log(URLs)
 
 var URLs = [
   "https://media.geeksforgeeks.org/wp-content/uploads/20200318142254/html9.png",

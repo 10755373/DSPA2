@@ -49,11 +49,11 @@ latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition
 longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model = torch.load('./models/resnet/resnet18_pretrained.pth')
+model = torch.load('./models/resnet/resnet18_pretrained32.pth')
 model.eval()
 transform = A.Compose(
     [
-        A.Resize(35,35),
+        A.Resize(32,32),
         A.Normalize(
             mean=(0,0,0),
             std =(1,1,1),

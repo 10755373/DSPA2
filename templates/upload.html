@@ -7,17 +7,123 @@
 
 <!-- This section will contain the contents displayed on upload.html -->
 {% block content %}
-<div class="parent example">
-     <!--<img src="{{ url_for('static', filename='img/grape.jpg')}}" class="image1"> -->
-    <img src="{{ url_for('video_feed') }}"  class="image1"> 
-    
-</div>
-<div class="bottom example">
-    <form method="post" action="{{ url_for('tasks') }}">
-    <input type="submit" class="btn-lg btn-info" value="Take CCTV" name="click"/>
-    <input type="submit" class="btn btn-info" value="Stop/Start" name="stop" />
-    </form>    
-</div>            
 
-</div>
+<html lang=”en”>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="application-name" content="Camera app">
+		<meta name="apple-mobile-web-app-title" content="Camera app">
+
+		<!-- Name of the app -->
+		<title>Camera App</title>
+
+
+		<!-- Link to main style sheet -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"> 
+	</head>
+	<body>
+
+		<!-- Camera -->
+		<main id="camera">
+
+		    <!-- Camera sensor -->
+		    <canvas id="camera--sensor"></canvas>
+		    
+		    <!-- Camera view -->
+		    <video id="camera--view" autoplay playsinline></video>
+		    
+		    <!-- Camera output -->
+		    <img src="//:0" alt="" id="camera--output">
+
+		    <!-- Camera trigger -->
+		    <button id="camera--trigger" >CCTV</button>
+
+		</main>
+
+		<!-- Reference to your JavaScript file -->
+		
+		
+		<script>
+			// Set constraints for the video stream
+			var constraints = { video: { facingMode: "user" }, audio: false };
+			var track = null;
+
+
+			// Define constants
+			const cameraView = document.querySelector("#camera--view"),
+				cameraOutput = document.querySelector("#camera--output"),
+				cameraSensor = document.querySelector("#camera--sensor"),
+				cameraTrigger = document.querySelector("#camera--trigger");
+
+
+			// Access the device camera and stream to cameraView
+			function cameraStart() {
+				navigator.mediaDevices
+					.getUserMedia(constraints)
+					.then(function(stream) {
+						track = stream.getTracks()[0];
+						cameraView.srcObject = stream;
+					})
+					.catch(function(error) {
+						console.error("Oops. Something is broken.", error);
+					});
+			};
+
+			// Take a picture when cameraTrigger is tapped
+			cameraTrigger.onclick= function() {				
+				if (navigator.geolocation) {
+					navigator.geolocation.watchPosition(showPosition);
+				} else { 
+					x.innerHTML = "Geolocation is not supported by this browser.";
+				}
+				cameraSensor.width = cameraView.videoHeight;
+				cameraSensor.height = cameraView.videoHeight;
+				cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+				cameraSensor.toBlob(photo, "image/jpg");
+				cameraOutput.src = cameraSensor.toDataURL("image/jpg");
+    			cameraOutput.classList.add("taken");
+				
+				
+				
+				// track.stop(); 
+			};
+						
+			function photo(file) {
+				var formdata =  new FormData();
+				formdata.append("snap", file);
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", "{{ url_for('photo_1') }}", true);
+				xhr.onload = function() {
+					if(this.status = 200) {
+						console.log(this.response);
+					} else {
+						console.error(xhr);
+					}
+					alert(this.response);
+				};
+				xhr.send(formdata);
+			};
+			
+						
+			function showPosition(position) {
+				var lat =position.coords.latitude;
+				var lon= position.coords.longitude;
+			}
+
+			// Start the video stream when the window loads
+			window.addEventListener("load", cameraStart, false);
+
+				
+			
+		</script>
+
+		<!-- Reference to adapter.js -->
+		<script src="{{ url_for('static', filename='js/adapter-min.js')}}"></script>
+
+	</body>
+</html> 
 {% endblock %}

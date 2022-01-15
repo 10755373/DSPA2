@@ -1,9 +1,3 @@
-  body {
-    margin: 0;
-    text-align: center;
-
-  }
-  
 .gallery {
     display: gallery;
     grid-template-columns: repeat(6, 200px);
@@ -11,14 +5,12 @@
     align-content: center;
     grid-gap: 10px;
     height: 100vh;
+    margin: 0 2%;
 }
-  
-.gallery img {
-    max-height: 200px;
-    max-width: 20%;
-    padding: 5px;
-    cursor: pointer;
-  }
+
+.gallery-text {
+    text-align: center;
+}
 
 .slide{
     display: none;
@@ -34,8 +26,15 @@
     display: none;
   }
   
-  #lightbox.active {
+#lightbox.active {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+.gallery img {
+    max-height: 200px;
+    max-width: 20%;
+    padding: 5px;
+    cursor: pointer;
+}

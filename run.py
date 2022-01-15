@@ -171,6 +171,13 @@ def get_prediction(image, model):
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(output.data, 1)
         return predicted
+    
+@app.route('/location', methods=['POST'])
+def location():
+    latitude = request.json.get('latitude')
+    longitude = request.json.get('longitude')
+    print(latitude, longitude)
+    return 'Location Sent!'
 
 '''
 # Displays the camara 

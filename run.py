@@ -133,12 +133,7 @@ def gen_frames():
         else:
             pass
 
-def get_prediction(image, model):
-    with torch.no_grad():
-        output = model(image)
-        # the class with the highest energy is what we choose as prediction
-        _, predicted = torch.max(output.data, 1)
-        return predicted
+
 '''
     
 @app.route("/upload.html")
@@ -150,17 +145,32 @@ def photo_1():
     if request.method == 'POST':
         #fs = request.files['snap'] # it raise error when there is no `snap` in form
         fs = request.files.get('snap')
+        
         print(type(fs))
         if fs: 
             print('FileStorage:', fs)
             print('filename:', fs.filename)
-          
-            now = datetime.datetime.now()
-            p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.jpg".format(str(now).replace(":",''))])
-            fs.save(p)
-            return 'Got Snap!' 
+            
+            img = transform(image=numpy.array(Image.open(fs.stream).convert('RGB')))['image'].to(device).unsqueeze(0)
+
+            if get_prediction(img, model)[0].item() == 0:
+                now = datetime.datetime.now()
+            
+                p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.jpg".format(str(now).replace(":",''))])
+                fs.save(p)
+                return 'Got Snap! Your CCTV Sign has been saved.'
+            else:
+                return 'No CCTV Sign has been detected! Please, Try Again.'
         else: 
             return 'You forgot Snap!'
+        
+
+def get_prediction(image, model):
+    with torch.no_grad():
+        output = model(image)
+        # the class with the highest energy is what we choose as prediction
+        _, predicted = torch.max(output.data, 1)
+        return predicted
 
 '''
 # Displays the camara 

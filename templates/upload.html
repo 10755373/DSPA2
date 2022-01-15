@@ -7,71 +7,23 @@
 
 <!-- This section will contain the contents displayed on upload.html -->
 {% block content %}
-
-<html lang=”en”>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="application-name" content="Camera app">
-		<meta name="apple-mobile-web-app-title" content="Camera app">
-
-		<!-- Name of the app -->
-		<title>Camera App</title>
-
-
-		<!-- Link to main style sheet -->
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"> 
-	</head>
-	<body>
+<div class="row">
+	<div class="col-sm-12">
 
 		<!-- Camera -->
 		<main id="camera">
 
-		    <!-- Camera sensor -->
-		    <canvas id="camera--sensor"></canvas>
-		    
-		    <!-- Camera view -->
-		    <video id="camera--view" autoplay playsinline></video>
-		    
-		    <!-- Camera output -->
-		    <img src="//:0" alt="" id="camera--output">
+			<!-- Camera sensor -->
+			<canvas id="camera--sensor"></canvas>
 
-		    <!-- Camera trigger -->
-		    <button id="camera--trigger" >CCTV</button>
+			<!-- Camera view -->
+			<video id="camera--view" autoplay playsinline></video>
 
-		</main>
+			<!-- Camera output -->
+			<img src="//:0" alt="" id="camera--output">
 
-		<!-- Reference to your JavaScript file -->
-		
-		
-		<script>
-			// Set constraints for the video stream
-			var constraints = { video: { facingMode: "user" }, audio: false };
-			var track = null;
-
-
-			// Define constants
-			const cameraView = document.querySelector("#camera--view"),
-				cameraOutput = document.querySelector("#camera--output"),
-				cameraSensor = document.querySelector("#camera--sensor"),
-				cameraTrigger = document.querySelector("#camera--trigger");
-
-
-			// Access the device camera and stream to cameraView
-			function cameraStart() {
-				navigator.mediaDevices
-					.getUserMedia(constraints)
-					.then(function(stream) {
-						track = stream.getTracks()[0];
-						cameraView.srcObject = stream;
-					})
-					.catch(function(error) {
-						console.error("Oops. Something is broken.", error);
-					});
-			};
+			<!-- Camera trigger -->
+			<button id="camera--trigger" >CCTV</button>
 
 			// Take a picture when cameraTrigger is tapped
 			cameraTrigger.onclick= function() {				
@@ -126,10 +78,13 @@
 				
 			
 		</script>
+		</main>
+	</div>
+</div>
 
-		<!-- Reference to adapter.js -->
-		<script src="{{ url_for('static', filename='js/adapter-min.js')}}"></script>
+<!-- Reference to the functional JavaScript file -->
+<script src="{{url_for('static', filename='js/upload.js')}}"></script>
 
-	</body>
-</html> 
+<!-- Reference to adapter.js -->
+<script src="{{ url_for('static', filename='js/adapter-min.js')}}"></script>
 {% endblock %}

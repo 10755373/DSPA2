@@ -6,10 +6,18 @@
 
 <!-- This section will contain the contents displayed on gallery.html -->
 {% block content %}
-<h2>GeeksforGeeks</h2>
-<b>A Computer Science Portal for Geeks</b>
-<div class="gallery" id="myGallery0">
-    <script type="module" src="{{url_for('static', filename='js/gallery.js')}}"></script>
+<div class="row gallery-text">
+    <div class="col-sm-12">
+        <h2>CCTV Signs Across the Globe</h2>
+        <b>A gallery containing uploads currently in our Database</b>
+        </br>
+        </br>
+    </div>
+</div>
+<div class="row">
+    <div class="gallery" id="myGallery0">
+        <script type="module" src="{{url_for('static', filename='js/gallery.js')}}"></script>
+    </div>
 </div>
 
 {% endblock %}

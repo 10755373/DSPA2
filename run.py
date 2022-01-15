@@ -16,6 +16,7 @@ from albumentations.pytorch import ToTensorV2
 from PIL import Image
 import numpy
 
+import pyrebase
 
 # Upload code
 # Saving pics from file
@@ -25,7 +26,7 @@ import numpy
 #	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #make shots directory to save pics
-global capture,switch,model,transform,device 
+global capture,switch,model,transform,device,db,store 
 capture=0
 switch=0
 
@@ -45,8 +46,24 @@ PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':"amsterdam"}
 r = requests.get(url = URL, params = PARAMS) 
 data = r.json()
 
-latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
-longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
+#latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
+#longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
+
+config = {
+    "apiKey": "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
+    "authDomain": "dspa2-89403.firebaseapp.com",
+    "databaseURL": "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
+    "projectId": "dspa2-89403",
+    "storageBucket": "dspa2-89403.appspot.com",
+    "messagingSenderId": "1067069276652",
+    "appId": "1:1067069276652:web:a7905bfd04c842886780c9",
+    "measurementId": "G-9LFKZ5YGHG",
+    "serviceAccount": "serviceAccountKey.json"
+}
+
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+store = firebase.storage()
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = torch.load('./models/resnet/resnet18_pretrained32.pth')
@@ -150,14 +167,38 @@ def photo_1():
         if fs: 
             print('FileStorage:', fs)
             print('filename:', fs.filename)
+            b_image = Image.open(fs.stream).convert('RGB')
+            img = transform(image=numpy.array(b_image))['image'].to(device).unsqueeze(0)
             
-            img = transform(image=numpy.array(Image.open(fs.stream).convert('RGB')))['image'].to(device).unsqueeze(0)
-
             if get_prediction(img, model)[0].item() == 0:
-                now = datetime.datetime.now()
-            
-                p = os.path.sep.join([UPLOAD_FOLDER, "camshot_{}.jpg".format(str(now).replace(":",''))])
-                fs.save(p)
+                now = str(datetime.datetime.now())
+                lat = latitude
+                lon = longitude
+                filename = "camshot_{}.jpg".format(now.replace(":",'').replace(' ','_').replace('.','-'))
+                print(now, lat, lon, filename)
+                
+                b_image.save(filename)
+                
+                path_on_cloud = ("Images/" + filename)
+                
+                
+                # Uploads the image to the store.
+                store.child(path_on_cloud).put(filename)
+                db.child(path_on_cloud.replace(".jpg", ""))
+                data = {"filename": filename,
+                        "latitude": latitude,
+                        "longitude": longitude,
+                        "datetime": now}
+                os.remove(filename)
+                
+                # Tries to update the database spot with that name if data is already there.
+                try:
+                    db.update(data)
+
+                # If there is no data in that spot yet, it sets the data.
+                except AttributeError:
+                    db.set(data)
+                
                 return 'Got Snap! Your CCTV Sign has been saved.'
             else:
                 return 'No CCTV Sign has been detected! Please, Try Again.'
@@ -174,11 +215,13 @@ def get_prediction(image, model):
     
 @app.route('/location', methods=['POST'])
 def location():
+    global latitude, longitude
     latitude = request.json.get('latitude')
     longitude = request.json.get('longitude')
-    print(latitude, longitude)
     return 'Location Sent!'
 
+def to_database():
+    pass
 '''
 # Displays the camara 
 @app.route("/video_feed")

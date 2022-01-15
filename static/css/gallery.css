@@ -4,7 +4,7 @@
 
   }
   
-  .grid {
+  .gallery {
     display: gallery;
     grid-template-columns: repeat(6, 200px);
     justify-content: center;
@@ -13,7 +13,7 @@
     height: 100vh;
   }
   
-  .grid img {
+  /* .grid img {
     width: 200px;
     height: 200px;
     cursor: pointer;
@@ -23,7 +23,7 @@
   height: 50px;
   transition: 1s;
   padding: 5px;
-}
+} */
 .slide{
     display: none;
 }

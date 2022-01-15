@@ -22,7 +22,7 @@ const analytics = getAnalytics(app);
 const storage = getStorage();
 const storageRef = ref(storage, "Images/");
 
-
+// Reads all the photos in the database into img elements in the gallery
 const lightbox = document.createElement('div')
 lightbox.id = 'lightbox'
 document.body.appendChild(lightbox)
@@ -30,6 +30,8 @@ listAll(storageRef).then(function(result){
     console.log(result);
     result.items.forEach(function(itemRef){
       getDownloadURL(itemRef).then(function(url){
+
+            // Makes a new img element for each photo
             var idhtml = document.getElementsByClassName("gallery")[0];
             	var img = new Image();
 	            img.src = url;

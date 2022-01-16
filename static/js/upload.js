@@ -26,7 +26,7 @@ function cameraStart() {
 // Take a picture when cameraTrigger is tapped
 cameraTrigger.onclick= function() {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(showPosition);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -42,24 +42,29 @@ cameraTrigger.onclick= function() {
 function photo(file) {
     var formdata =  new FormData();
     formdata.append("snap", file);
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{{ url_for('photo_1') }}", true);
-    xhr.onload = function() {
-        if(this.status = 200) {
-            console.log(this.response);
-        } else {
-            console.error(xhr);
-        }
-        alert(this.response);
-    };
-    xhr.send(formdata);
+    $.ajax({
+        type: 'POST',
+        url: '/photo',
+        data: formdata,
+        processData: false,
+        contentType: false
+    }).done(function(res) { 
+        alert(res.response); 
+    });
+    
 };
 
 
 function showPosition(position) {
-    var lat =position.coords.latitude;
+	var lat= position.coords.latitude;
     var lon= position.coords.longitude;
-}
+    $.ajax({
+        type: 'POST',
+        url: '/location',
+        data: JSON.stringify({'latitude': lat, 'longitude': lon}, null, '\t'),
+        contentType: 'application/json;charset=UTF-8'
+    });
+};
 
 // Start the video stream when the window loads
 window.addEventListener("load", cameraStart, false);

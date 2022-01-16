@@ -1,7 +1,7 @@
 #Uploading page adapted from https://github.com/hemanth-nag/Camera_Flask_App/blob/main/camera_flask_app.py  
 # and https://roytuts.com/upload-and-display-image-using-python-flask/, accesed 2022/07/01
 
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, json
 import cv2
 import datetime
 import os
@@ -158,9 +158,10 @@ def upload():
     return render_template("upload.html")
 
 @app.route('/photo', methods=['GET', 'POST'])
-def photo_1():
+def photo():
     if request.method == 'POST':
-        #fs = request.files['snap'] # it raise error when there is no `snap` in form
+         # it raise error when there is no `snap` in form
+        fs = None
         fs = request.files.get('snap')
         
         print(type(fs))
@@ -169,7 +170,7 @@ def photo_1():
             print('filename:', fs.filename)
             b_image = Image.open(fs.stream).convert('RGB')
             img = transform(image=numpy.array(b_image))['image'].to(device).unsqueeze(0)
-            
+            print(get_prediction(img, model)[0].item())
             if get_prediction(img, model)[0].item() == 0:
                 now = str(datetime.datetime.now())
                 lat = latitude
@@ -189,6 +190,7 @@ def photo_1():
                         "latitude": latitude,
                         "longitude": longitude,
                         "datetime": now}
+                
                 os.remove(filename)
                 
                 # Tries to update the database spot with that name if data is already there.
@@ -198,12 +200,14 @@ def photo_1():
                 # If there is no data in that spot yet, it sets the data.
                 except AttributeError:
                     db.set(data)
-                
-                return 'Got Snap! Your CCTV Sign has been saved.'
+                response='Got Snap! Your CCTV Sign has been saved.'
             else:
-                return 'No CCTV Sign has been detected! Please, Try Again.'
+                response='No CCTV Sign has been detected! Please, Try Again.'
         else: 
-            return 'You forgot Snap!'
+            response='You forgot Snap!'
+        return json.jsonify({ 
+            'response': response 
+        }) 
         
 
 def get_prediction(image, model):
@@ -216,8 +220,10 @@ def get_prediction(image, model):
 @app.route('/location', methods=['POST'])
 def location():
     global latitude, longitude
+    latitude, longitude = None, None
     latitude = request.json.get('latitude')
     longitude = request.json.get('longitude')
+    print(latitude, longitude)
     return 'Location Sent!'
 
 def to_database():

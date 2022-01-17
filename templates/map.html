@@ -45,14 +45,14 @@
   const longi = {{longitude}};
   const latit = {{latitude}};
 
-  function createInfoBubble(map) {
-                // Create info bubble
-                var bubble = new H.ui.InfoBubble({ lng: longi, lat: latit }, {
-                    content: '<b>Hello World!</b>'
-                });
-                // Add info bubble to the UI:
-                ui.addBubble(bubble);
-            }
+  // function createInfoBubble(map) {
+  //               // Create info bubble
+  //               var bubble = new H.ui.InfoBubble({ lng: longi, lat: latit }, {
+  //                   content: '<b>Hello World!</b>'
+  //               });
+  //               // Add info bubble to the UI:
+  //               ui.addBubble(bubble);
+  //           }
   
   
   // Initialize the platform object:
@@ -131,16 +131,16 @@
       result.forEach(function(itemRef){
         var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
         map.addObject(markers);
-        // markers.setData("<p>hello peeps</p>");
-        // markers.addEventListener("tap", event => {
-        //   const bubble = new H.ui.InfoBubble(
-        //     event.target.getPosition(),
-        //     {
-        //       content: event.target.getData()
-        //     }
-        //   );
-        //   ui.addBubble(bubble)
-        // })
+        markers.setData("<p>hello peeps</p>");
+        markers.addEventListener("tap", event => {
+          const bubble = new H.ui.InfoBubble(
+            event.target.getPosition(),
+            {
+              content: event.target.getData()
+            }
+          );
+          ui.addBubble(bubble)
+        })
         group.addObject(markers)
           });
       
@@ -160,7 +160,8 @@
   scalebar.setAlignment('top-left');
 
 
-  createInfoBubble(map);
+  // createInfoBubble(map);
+// credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-maps
 
 </script>
 {% endblock %}

@@ -264,7 +264,7 @@ def ethics_paper():
     return render_template("ethics_paper.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8080)
 
 #closes camara
 #camera.release()

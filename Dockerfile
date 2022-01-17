@@ -24,7 +24,7 @@ RUN pip install Flask && \
 WORKDIR /app
 COPY . /app
 
-ENV PORT 8080
+ENV PORT 5000
 ENV HOST 0.0.0.0
 ENV FLASK_APP=app.py
 

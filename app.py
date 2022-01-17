@@ -46,8 +46,8 @@ PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':"amsterdam"}
 r = requests.get(url = URL, params = PARAMS) 
 data = r.json()
 
-#latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
-#longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
+latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
+longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
 config = {
     "apiKey": "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
@@ -264,7 +264,7 @@ def ethics_paper():
     return render_template("ethics_paper.html")
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
 #closes camara
 #camera.release()

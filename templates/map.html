@@ -5,8 +5,8 @@
 
 {% block content %}
 <div style="width: 100vw; height: 100vh" id="mapContainer"></div>
-<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
+<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css"/>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
@@ -57,10 +57,12 @@
   
   // Initialize the platform object:
   var platform = new H.service.Platform({
-  'app_id': '{{app_ID}}',
-  'app_code': '{{app_CODE}}',
-  // useHTTPS: true
+     useCIT: true,
+     app_id: '{{app_ID}}',
+     app_code: '{{app_CODE}}',
+     useHTTPS: true
   });
+
 
 
 
@@ -162,6 +164,7 @@
 
   // createInfoBubble(map);
 // credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-maps
+
 
 </script>
 {% endblock %}

@@ -7,7 +7,33 @@
 <div style="width: 100vw; height: 100vh" id="mapContainer"></div>
 <!-- <script src="{{url_for('static', filename='js/map.js')}}"></script> -->
 
-<script>
+<script type="module">
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
+    authDomain: "dspa2-89403.firebaseapp.com",
+    databaseURL: "https://dspa2-89403-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "dspa2-89403",
+    storageBucket: "dspa2-89403.appspot.com",
+    messagingSenderId: "1067069276652",
+    appId: "1:1067069276652:web:a7905bfd04c842886780c9",
+    measurementId: "G-9LFKZ5YGHG"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // Initialize Realtime Firebase
+  // import { getDatabase, ref, set, child, get, update, remove } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"
   // Initialize the platform object:
   var platform = new H.service.Platform({
   'app_id': '{{app_ID}}',
@@ -29,7 +55,23 @@
   const mapEvents = new H.mapevents.MapEvents(map);
   const behavior = new H.mapevents.Behavior(mapEvents);
 
-  const marker1 = new H.map.Marker({lat: latit, lng: longi});
-  map.addObject(marker1);
+  // const marker1 = new H.map.Marker({lat: latit, lng: longi});
+  // map.addObject(marker1);
+  const database = getDatabase();
+  const firebaseRef = ref(database, "Images");
+
+  const group = new H.map.Group()
+  map.addObject(group)
+
+  get(firebaseRef).then(function(result){
+      result.forEach(function(itemRef){
+        var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
+        map.addObject(markers);
+        group.addObject(markers)
+          });
+      
+  }).catch(function(error){
+      console.log(error);
+  });
 </script>
 {% endblock %}

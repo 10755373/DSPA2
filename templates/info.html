@@ -8,18 +8,12 @@
 {% block content %}
 
 <div class="row remove-margin-and-padding">
-    <img class="center-fit" src="{{ url_for('static', filename='img/sign-of-signs.jpeg') }}" alt="CCTV sign">
+    <img class="center-fit" src="{{ url_for('static', filename='img/sign-of-signs-cctv.jpeg') }}" alt="CCTV sign">
 </div>
 
 <div class = "row remove-margin-and-padding">
     <div class="col-sm-12 add-margin-20">
-        <h1>Bigger Brother is watching you!</h1>
-        </br>
-        </br>
-        <p class="text-sm-start">
-            Do you feel like you are being watched?
-        </p>
-
+        <h1>Is Big Brother watching you?</h1>
         <p>
             This website is made to help you find out. Closed-circuit television (CCTV) systems are
             increasingly widespread. We might not be aware of this at first, but as soon as you start
@@ -27,43 +21,41 @@
             signs or cameras watching you. Big Brother has become a reality.
         </p>
 
+        <h3>About us</h3>
         <p>
             We decided to increase awareness of this fact through creating a platform where we can
             collectively track the CCTV surveillance down. Thus, we will be Bigger Brother.
         </p>
-
         <p>
             The artist Daniel Buzzo made an incredible start by photographing CCTV signs and noting down their
             locations in several countries all by himself. You can view his map and gallery on
             <a href="https://signsofsurveillance.com/">signsofsurveillance.com</a>.
         </p>
 
-        <p>
-            We have used his data set to create this platform, and you can find many of his pictures in our gallery too
-            by going to <img src="{{ url_for('static', filename='img/gallery.png') }}" height="20px" width="20px" alt="Gallery">,
-            on our map by going to <img src="{{ url_for('static', filename='img/map.png') }}" height="20px" width="20px" alt="Map">.
-            The pinpoints are the individual CCTV signs already photographed and uploaded by people, including Daniel Buzzo's.
-        </p>
+        <h3> How to use the website </h3>
+        <table id="info-table">
+            <tr>
+                <td class="icon-col" ><img src="{{ url_for('static', filename='img/map.png') }}" alt="Map"></td>
+                <td> Map page description </td>
+            </tr>
+            <tr>
+                <td class="icon-col" ><img src="{{ url_for('static', filename='img/camera.png') }}" alt="Upload"></td>
+                <td>
+                    Ready to start watching Big Brother yourself? In this page you can make and upload
+                    your own photos of CCTV signs.
+                </td>
+            </tr>
+            <tr>
+                <td class="icon-col" ><img src="{{ url_for('static', filename='img/gallery.png') }}" alt="Gallery"></td>
+                <td> Gallery page description </td>
+            </tr>
+            <tr>
+                <td class="icon-col" ><img src="{{ url_for('static', filename='img/info.png') }}" alt="Home"></td>
+                <td> Info page description </td>
+            </tr>
+        </table>
 
-        <p>
-            You can find more about CCTV surveillance and our motivation by reading our essay under
-            <img src="{{ url_for('static', filename='img/paper.png') }}" height="20px" width="20px" alt="Paper">.
-        </p>
-
-        <p>
-            Ready to start watching Big Brother yourself? Go to
-            <img src="{{ url_for('static', filename='img/camera.png') }}" height="20px" width="20px" alt="Upload">
-            and take pictures of all the signs you come across. There will be more than you think...
-        </p>
-
-        <p>
-            You can get back to this page any time by pressing
-            <img src="{{ url_for('static', filename='img/info.png') }}" height="20px" width="20px" alt="Home">.
-        </p>
-
-        <H2>Why the awareness of CCTV surveillance must grow.</H2>
-        </br>
-        </br>
+        <H3>Why the awareness of CCTV surveillance must grow</H3>
         <p>
             With the increase of technology use across the globe, closed-circuit television (CCTV)
             surveillance is also becoming increasingly widespread. This trend should, however,
@@ -83,6 +75,10 @@
             To cope with CCTV ethically and safely, people must gain
             more awareness about the current state of affairs and possible future scenarios regarding CCTV
             use.
+        </p>
+        </br>
+        <p>
+            Download our full essay <a href="essay.pdf" download="Why the awareness of CCTV surveillance must grow">here</a>.
         </p>
 
         </br>

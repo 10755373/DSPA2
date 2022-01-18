@@ -22,19 +22,19 @@
 
 			<!-- Camera trigger -->
 			<button id="camera--trigger" >Take Picture</button>
-            
+
 		</main>
 	</div>
 </div>
 
 <!-- Reference to the functional JavaScript file -->
-<script type="text/javascript">
+<script>
 	// Set constraints for the video stream
 const constraints = {
   video: {
     facingMode: {
       ideal: "environment",
-      
+
     }
   },
   audio:false
@@ -62,10 +62,10 @@ function cameraStart() {
         });
 };
 // Take a picture when cameraTrigger is tapped
-cameraTrigger.onclick= function() {				
+cameraTrigger.onclick= function() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
+    } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
     cameraSensor.width = cameraView.videoHeight;
@@ -74,38 +74,36 @@ cameraTrigger.onclick= function() {
     cameraSensor.toBlob(photo, "image/jpg");
     cameraOutput.src = cameraSensor.toDataURL("image/jpg");
     cameraOutput.classList.add("taken");
-    
-    
-    
-    // track.stop(); 
-};
-            
-function photo(file) {
-    var formdata =  new FormData();
-    formdata.append("snap", file);
-    $.ajax({
-        type: 'POST',
-        url: '/photo',
-        data: formdata,
-        processData: false,
-        contentType: false
-    }).done(function(res) { 
-        alert(res.response); 
-    });
-    
+
+
+
+    // track.stop();
 };
 
-            
 function showPosition(position) {
-    var lat= position.coords.latitude;
-    var lon= position.coords.longitude;
-    $.ajax({
-        type: 'POST',
-        url: '/location',
-        data: JSON.stringify({'latitude': lat, 'longitude': lon}, null, '\t'),
-        contentType: 'application/json;charset=UTF-8'
-    });
-};
+				window.lat = position.coords.latitude;
+				window.lon = position.coords.longitude;
+			};
+
+function photo(file) {
+			var formdata =  new FormData();
+			formdata.append("snap", file);
+			formdata.append("lat",window.lat );
+			formdata.append("lon",window.lon );
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "{{ url_for('photo') }}", true);
+			xhr.onload = function() {
+			if(this.status = 200) {
+						console.log(this.response);
+					} else {
+						console.error(xhr);
+					}
+					alert(this.response);
+				};
+				xhr.send(formdata);
+			};
+
+
 
 // Start the video stream when the window loads
 window.addEventListener("load", cameraStart, false);

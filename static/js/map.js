@@ -20,6 +20,9 @@ const analytics = getAnalytics(app);
 // Initialize Realtime Firebase
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"
 
+// Initialize Storage
+import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
+
 // Check if geolocation is supported by the browser
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -71,45 +74,68 @@ var icon = new H.map.Icon(svgMarkup);
 var user_marker = new H.map.Marker(user_coords, {icon: icon});
 map.addObject(user_marker);
 
-// Create the database reference
-const database = getDatabase();
-const firebaseRef = ref(database, "Images");
+// Create the storage link
+const storage = getStorage();
 
 const group = new H.map.Group()
 map.addObject(group)
 
-get(firebaseRef).then(function(result){
-    result.forEach(function(itemRef){
-        var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
-        map.addObject(markers);
-        markers.setData("<p>Image needs to go here</p>");
-        markers.addEventListener("tap", event => {
-            const bubble = new H.ui.InfoBubble(
-            event.target.getPosition(),
-            {
-              content: event.target.getData()
-            }
-            );
-            ui.addBubble(bubble)
-        })
-        group.addObject(markers)
-    });
+// Function that gets all the firebase references from a realtime database folder
+async function getAllReferences(folderReference) {
+    const data = await get(folderReference).then(function(result) {return result});
+    const refArray = []
+    await data.forEach(function(itemRef){refArray.push(itemRef)});
+    return refArray
+}
 
-    }).catch(function(error){
-      console.log(error);
-    });
+// Gets all the references from the specified realtime database folder
+const database = getDatabase();
+const firebaseRef = ref(database, "Images");
+const itemRefs = getAllReferences(firebaseRef);
+console.log(itemRefs);
 
-    // Move UI elements to the top left of the map
-    var mapSettings = ui.getControl('mapsettings');
-    var zoom = ui.getControl('zoom');
-    var scalebar = ui.getControl('scalebar');
-    var panorama = ui.getControl('panorama');
-
-    panorama.setAlignment('top-right');
-    mapSettings.setAlignment('top-left');
-    zoom.setAlignment('top-left');
-    scalebar.setAlignment('top-left');
+//get(firebaseRef).then(function(result){
+//    result.forEach(function(itemRef){
+//        var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
+////        console.log(itemRef.ref);
+//        const url = getURL(storage, itemRef.ref._path.pieces_[1]);
+//        console.log(url);
+//        console.log("hello");
+//        map.addObject(markers);
+//        markers.setData("<p>Image needs to go here</p>");
+//        markers.addEventListener("tap", event => {
+//            const bubble = new H.ui.InfoBubble(
+//            event.target.getPosition(),
+//            {
+//              content: event.target.getData()
+//            }
+//            );
+//            ui.addBubble(bubble)
+//        })
+//        group.addObject(markers)
+//    });
+//
+//    }).catch(function(error){
+//      console.log(error);
+//    });
+//
+//    // Move UI elements to the top left of the map
+//    var mapSettings = ui.getControl('mapsettings');
+//    var zoom = ui.getControl('zoom');
+//    var scalebar = ui.getControl('scalebar');
+//    var panorama = ui.getControl('panorama');
+//
+//    panorama.setAlignment('top-right');
+//    mapSettings.setAlignment('top-left');
+//    zoom.setAlignment('top-left');
+//    scalebar.setAlignment('top-left');
 };
 
 // createInfoBubble(map);
-// credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-maps
+// credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-
+
+
+//console.log(getDownloadURL(sRef(storage, "Images/" + itemRef.ref.path.pieces[1])).then(function(url){
+//            //markers.setData("<img src='"+ url +"' >");
+//            return url
+//        }));

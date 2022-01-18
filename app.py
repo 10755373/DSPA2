@@ -108,10 +108,8 @@ def photo():
             print(get_prediction(img, model)[0].item())
             if get_prediction(img, model)[0].item() == 0:
                 now = str(datetime.datetime.now())
-                lat = latitude
-                lon = longitude
                 filename = "camshot_{}.jpg".format(now.replace(":", '').replace(' ', '_').replace('.', '-'))
-                print(now, lat, lon, filename)
+                print(now, latitude, longitude, filename)
 
                 b_image.save(filename)
 

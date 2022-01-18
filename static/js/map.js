@@ -84,6 +84,10 @@ const firebaseRef = ref(database, "Images");
 // Create the storage link
 const storage = getStorage();
 
+async function getURL(store, reference) {
+    return await getDownloadURL(sRef(store, reference));
+}
+
 // Function dat gets the uploads from the realtime database and makes markers on the map accordingly
 async function createMarkersFromPromises(worldMap, folderReference, store) {
 
@@ -96,19 +100,21 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
                                             lng: itemRef._node.children_.root_.right.value.value_})
             worldMap.addObject(marker);
 
-            // Prints the download url data of the corresponding image in the Firestore storage
-            console.log("downloadurl: ", getDownloadURL(sRef(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg")));
+            const url = getURL(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg");
+            url.then(function(result) {
 
-            // Definition of the click event
-    //        markers.addEventListener("tap", event => {
-    //            const bubble = new H.ui.InfoBubble(
-    //            event.target.getPosition(),
-    //            {
-    //              content: event.target.getData()
-    //            }
-    //            );
-    //            ui.addBubble(bubble)
-    //        });
+                // Definition of the click event, create an image from the url in an info bubble
+                marker.addEventListener("tap", event => {
+                    const bubble = new H.ui.InfoBubble(
+                    event.target.getPosition(),
+                    {
+                        content: '<img src="'+result+'">'
+                    }
+                    );
+                    ui.addBubble(bubble)
+                });
+                console.log("downloadurl: ", result);
+            });
             group.addObject(marker)
         });
     }).catch(function(error){
@@ -117,34 +123,6 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
 }
 
 createMarkersFromPromises(map, firebaseRef, storage);
-
-
-// OLD FUNCTION FOR REFERENCE
-//get(firebaseRef).then(function(result){
-//    result.forEach(function(itemRef){
-//        var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
-////        console.log(itemRef.ref);
-//        const url = getURL(storage, itemRef.ref._path.pieces_[1]);
-//        console.log(url);
-//        console.log("hello");
-//        map.addObject(markers);
-//        markers.setData("<p>Image needs to go here</p>");
-//        markers.addEventListener("tap", event => {
-//            const bubble = new H.ui.InfoBubble(
-//            event.target.getPosition(),
-//            {
-//              content: event.target.getData()
-//            }
-//            );
-//            ui.addBubble(bubble)
-//        })
-//        group.addObject(markers)
-//    });
-//
-//    }).catch(function(error){
-//      console.log(error);
-//    });
-//
 
 // Move UI elements to the top left of the map
 var mapSettings = ui.getControl('mapsettings');
@@ -160,9 +138,3 @@ scalebar.setAlignment('top-left');
 
 // createInfoBubble(map);
 // credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-
-
-
-//console.log(getDownloadURL(sRef(storage, "Images/" + itemRef.ref.path.pieces[1])).then(function(url){
-//            //markers.setData("<img src='"+ url +"' >");
-//            return url
-//        }));

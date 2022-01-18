@@ -40,7 +40,7 @@ function showPosition(position) {
 var platform = new H.service.Platform({
 'app_id': '{{app_ID}}',
 'app_code': '{{app_CODE}}',
-// useHTTPS: true
+ useHTTPS: true
 });
 
 var pixelRatio = window.devicePixelRatio || 1;

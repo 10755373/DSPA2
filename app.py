@@ -84,27 +84,27 @@ transform = A.Compose(
 app = Flask(__name__)
 
 #Uploading code
-app.secret_key = "secret key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+#app.secret_key = "secret key"
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Opens camara
 #camera = cv2.VideoCapture(1)
 
 
 # Defines the routes to the webpages.
 @app.route("/")
-@app.route("/index.html")
+@app.route("/map.html")
+def map():
+    # return render_template("map.html")
+	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE)
+
+@app.route("/info.html")
 def home():
-    return render_template("index.html")
+    return render_template("info.html")
 
 @app.route("/gallery.html")
 def gallery():
     return render_template("gallery.html")
-
-@app.route("/map.html")
-def map():
-    # return render_template("map.html")
-	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE,latitude=latitude,longitude=longitude)
 
 
 #Uploaging page code
@@ -226,8 +226,7 @@ def location():
     print(latitude, longitude)
     return 'Location Sent!'
 
-def to_database():
-    pass
+
 '''
 # Displays the camara 
 @app.route("/video_feed")

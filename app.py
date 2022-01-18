@@ -226,8 +226,7 @@ def location():
     print(latitude, longitude)
     return 'Location Sent!'
 
-def to_database():
-    pass
+
 '''
 # Displays the camara 
 @app.route("/video_feed")

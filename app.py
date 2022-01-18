@@ -84,9 +84,9 @@ transform = A.Compose(
 app = Flask(__name__)
 
 #Uploading code
-app.secret_key = "secret key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+#app.secret_key = "secret key"
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Opens camara
 #camera = cv2.VideoCapture(1)
 
@@ -104,7 +104,7 @@ def gallery():
 @app.route("/map.html")
 def map():
     # return render_template("map.html")
-	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE,latitude=latitude,longitude=longitude)
+	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE)
 
 
 #Uploaging page code

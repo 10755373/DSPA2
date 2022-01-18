@@ -43,8 +43,19 @@
   import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"
   import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
   // Obtain the default map types from the platform object
-  const longi = {{longitude}};
-  const latit = {{latitude}};
+  
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+
+    
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+  
+  function showPosition(position) {
+    var latit= position.coords.latitude;
+    var longi= position.coords.longitude;
 
   // function createInfoBubble(map) {
   //               // Create info bubble
@@ -91,7 +102,7 @@
   var map = new H.Map(document.getElementById('mapContainer'),
   defaultLayers.normal.map, {
     pixelRatio: pixelRatio,
-    zoom: 10,
+    zoom: 13,
     center: { lng: longi, lat: latit}
   });
 
@@ -166,7 +177,8 @@
   mapSettings.setAlignment('top-left');
   zoom.setAlignment('top-left');
   scalebar.setAlignment('top-left');
-
+  
+  };
 
   // createInfoBubble(map);
 // credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-maps

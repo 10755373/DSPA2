@@ -134,14 +134,14 @@ def photo():
                 # If there is no data in that spot yet, it sets the data.
                 except AttributeError:
                     db.set(data)
-                response = 'Got Snap! Your CCTV Sign has been saved.'
+                return 'Got Snap! Your CCTV Sign has been saved.'
             else:
-                response = 'No CCTV Sign has been detected! Please, Try Again.'
+                return 'No CCTV Sign has been detected! Please, Try Again.'
         else:
-            response = 'You forgot Snap!'
-        return json.jsonify({
-            'response': response
-        })
+            return 'You forgot Snap!'
+        #return json.jsonify({
+        #    'response': response
+        #})
 
 
 def get_prediction(image, model):

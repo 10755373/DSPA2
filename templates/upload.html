@@ -65,16 +65,17 @@ function cameraStart() {
 cameraTrigger.onclick= function() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
+        cameraSensor.width = cameraView.videoHeight;
+        cameraSensor.height = cameraView.videoHeight;
+        cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+        cameraSensor.toBlob(photo, "image/jpg");
+        cameraOutput.src = cameraSensor.toDataURL("image/jpg");
+        cameraOutput.classList.add("taken");
+
     } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
-    cameraSensor.width = cameraView.videoHeight;
-    cameraSensor.height = cameraView.videoHeight;
-    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-    cameraSensor.toBlob(photo, "image/jpg");
-    cameraOutput.src = cameraSensor.toDataURL("image/jpg");
-    cameraOutput.classList.add("taken");
-
+    
 
 
     // track.stop();

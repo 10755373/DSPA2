@@ -46,8 +46,8 @@ PARAMS = {'app_id':app_ID,'app_code':app_CODE,'searchtext':"amsterdam"}
 r = requests.get(url = URL, params = PARAMS) 
 data = r.json()
 
-#latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
-#longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
+latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
+longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
 config = {
     "apiKey": "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",

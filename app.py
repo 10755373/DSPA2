@@ -93,18 +93,18 @@ app = Flask(__name__)
 
 # Defines the routes to the webpages.
 @app.route("/")
-@app.route("/index.html")
-def home():
-    return render_template("index.html")
-
-@app.route("/gallery.html")
-def gallery():
-    return render_template("gallery.html")
-
 @app.route("/map.html")
 def map():
     # return render_template("map.html")
 	return render_template('map.html',app_ID=app_ID,app_CODE=app_CODE)
+
+@app.route("/info.html")
+def home():
+    return render_template("info.html")
+
+@app.route("/gallery.html")
+def gallery():
+    return render_template("gallery.html")
 
 
 #Uploaging page code

@@ -74,26 +74,52 @@ var icon = new H.map.Icon(svgMarkup);
 var user_marker = new H.map.Marker(user_coords, {icon: icon});
 map.addObject(user_marker);
 
-// Create the storage link
-const storage = getStorage();
-
 const group = new H.map.Group()
 map.addObject(group)
-
-// Function that gets all the firebase references from a realtime database folder
-async function getAllReferences(folderReference) {
-    const data = await get(folderReference).then(function(result) {return result});
-    const refArray = []
-    await data.forEach(function(itemRef){refArray.push(itemRef)});
-    return refArray
-}
 
 // Gets all the references from the specified realtime database folder
 const database = getDatabase();
 const firebaseRef = ref(database, "Images");
-const itemRefs = getAllReferences(firebaseRef);
-console.log(itemRefs);
 
+// Create the storage link
+const storage = getStorage();
+
+// Function dat gets the uploads from the realtime database and makes markers on the map accordingly
+async function createMarkersFromPromises(worldMap, folderReference, store) {
+
+    // Gets all the upload references in the reference folder and creates markers for them
+    await get(folderReference).then(function(result) {
+        result.forEach(function(itemRef) {
+
+            // Creates a marker belonging to the referenced upload and adds it to the map
+            var marker = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_,
+                                            lng: itemRef._node.children_.root_.right.value.value_})
+            worldMap.addObject(marker);
+
+            // Prints the download url data of the corresponding image in the Firestore storage
+            console.log("downloadurl: ", getDownloadURL(sRef(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg")));
+
+            // Definition of the click event
+    //        markers.addEventListener("tap", event => {
+    //            const bubble = new H.ui.InfoBubble(
+    //            event.target.getPosition(),
+    //            {
+    //              content: event.target.getData()
+    //            }
+    //            );
+    //            ui.addBubble(bubble)
+    //        });
+            group.addObject(marker)
+        });
+    }).catch(function(error){
+      console.log(error);
+    });
+}
+
+createMarkersFromPromises(map, firebaseRef, storage);
+
+
+// OLD FUNCTION FOR REFERENCE
 //get(firebaseRef).then(function(result){
 //    result.forEach(function(itemRef){
 //        var markers = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_, lng: itemRef._node.children_.root_.right.value.value_})
@@ -119,16 +145,17 @@ console.log(itemRefs);
 //      console.log(error);
 //    });
 //
-//    // Move UI elements to the top left of the map
-//    var mapSettings = ui.getControl('mapsettings');
-//    var zoom = ui.getControl('zoom');
-//    var scalebar = ui.getControl('scalebar');
-//    var panorama = ui.getControl('panorama');
-//
-//    panorama.setAlignment('top-right');
-//    mapSettings.setAlignment('top-left');
-//    zoom.setAlignment('top-left');
-//    scalebar.setAlignment('top-left');
+
+// Move UI elements to the top left of the map
+var mapSettings = ui.getControl('mapsettings');
+var zoom = ui.getControl('zoom');
+var scalebar = ui.getControl('scalebar');
+var panorama = ui.getControl('panorama');
+
+panorama.setAlignment('top-right');
+mapSettings.setAlignment('top-left');
+zoom.setAlignment('top-left');
+scalebar.setAlignment('top-left');
 };
 
 // createInfoBubble(map);

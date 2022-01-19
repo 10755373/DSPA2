@@ -136,7 +136,7 @@ def photo():
                 else:
                     return 'No CCTV Sign has been detected! Please, Try Again.'
             except:
-                return 'Aïe! Something broke'
+                return 'Location undefined, Please, Try Again.'
         else:
             return 'You forgot Snap!'
         #return json.jsonify({

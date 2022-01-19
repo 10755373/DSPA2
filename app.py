@@ -95,46 +95,48 @@ def upload():
 def photo():
     if request.method == 'POST':
         # it raise error when there is no `snap` in form
-        fs = None
+        fs, latitude, longitude = None, None, None
         fs = request.files.get('snap')
         latitude = request.form.get('lat')
         longitude = request.form.get('lon')
-        print(type(fs))
         if fs:
-            print('FileStorage:', fs)
-            print('filename:', fs.filename)
-            b_image = Image.open(fs.stream).convert('RGB')
-            img = transform(image=numpy.array(b_image))['image'].to(device).unsqueeze(0)
-            print(get_prediction(img, model)[0].item())
-            if get_prediction(img, model)[0].item() == 0:
-                now = str(datetime.datetime.now())
-                filename = "camshot_{}.jpg".format(now.replace(":", '').replace(' ', '_').replace('.', '-'))
-                print(now, latitude, longitude, filename)
+            try:
+                print('FileStorage:', fs)
+                print('filename:', fs.filename)
+                b_image = Image.open(fs.stream).convert('RGB')
+                img = transform(image=numpy.array(b_image))['image'].to(device).unsqueeze(0)
+                print(get_prediction(img, model)[0].item())
+                if get_prediction(img, model)[0].item() == 0:
+                    now = str(datetime.datetime.now())
+                    filename = "camshot_{}.jpg".format(now.replace(":", '').replace(' ', '_').replace('.', '-'))
+                    print(now, float(latitude), float(longitude), filename)
 
-                b_image.save(filename)
+                    b_image.save(filename)
 
-                path_on_cloud = ("Images/" + filename)
+                    path_on_cloud = ("Images/" + filename)
 
                 # Uploads the image to the store.
-                store.child(path_on_cloud).put(filename)
-                db.child(path_on_cloud.replace(".jpg", ""))
-                data = {"filename": filename,
+                    store.child(path_on_cloud).put(filename)
+                    db.child(path_on_cloud.replace(".jpg", ""))
+                    data = {"filename": filename,
                         "latitude": latitude,
                         "longitude": longitude,
                         "datetime": now}
 
-                os.remove(filename)
+                    os.remove(filename)
 
                 # Tries to update the database spot with that name if data is already there.
-                try:
-                    db.update(data)
+                    try:
+                        db.update(data)
 
                 # If there is no data in that spot yet, it sets the data.
-                except AttributeError:
-                    db.set(data)
-                return 'Got Snap! Your CCTV Sign has been saved.'
-            else:
-                return 'No CCTV Sign has been detected! Please, Try Again.'
+                    except AttributeError:
+                        db.set(data)
+                    return 'Got Snap! Your CCTV Sign has been saved.'
+                else:
+                    return 'No CCTV Sign has been detected! Please, Try Again.'
+            except:
+                return 'Aïe! Something broke'
         else:
             return 'You forgot Snap!'
         #return json.jsonify({

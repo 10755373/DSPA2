@@ -61,18 +61,10 @@ defaultLayers.normal.map, {
 var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-// Define a variable holding SVG mark-up that defines an icon image for user
-var svgMarkup = '<svg width="24" height="24" ' +
-'xmlns="http://www.w3.org/2000/svg">' +
-'<rect stroke="white" fill="red" x="1" y="1" width="22" ' +
-'height="22" /><text x="12" y="18" font-size="12pt" ' +
-'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
-'fill="white">U</text></svg>';
-
 // Create a special marker for the ussr location
-var icon = new H.map.Icon(svgMarkup);
-var user_marker = new H.map.Marker(user_coords, {icon: icon});
-map.addObject(user_marker);
+var userIcon = new H.map.Icon("/static/img/you_icon.png", {size: {w: 100, h: 100}});
+var userMarker = new H.map.Marker(user_coords, {icon: userIcon});
+map.addObject(userMarker);
 
 const group = new H.map.Group()
 
@@ -83,6 +75,9 @@ const firebaseRef = ref(database, "Images");
 // Create the storage link
 const storage = getStorage();
 
+// Create a special marker for the pins
+var pinIcon = new H.map.Icon("/static/img/pin.png", {size: {w: 100, h: 100}});
+
 // Function dat gets the uploads from the realtime database and makes markers on the map accordingly
 async function createMarkersFromPromises(worldMap, folderReference, store) {
 
@@ -92,7 +87,8 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
 
             // Creates a marker belonging to the referenced upload and adds it to the map
             var marker = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_,
-                                            lng: itemRef._node.children_.root_.right.value.value_})
+                                            lng: itemRef._node.children_.root_.right.value.value_},
+                                            {icon: pinIcon});
 
             // Stores the download URLs of the corresponding image in the markers
             getDownloadURL(sRef(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg"))

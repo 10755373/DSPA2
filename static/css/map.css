@@ -11,3 +11,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.H_ib_content * {
+    width: 100px;
+    height: 100px;
+}

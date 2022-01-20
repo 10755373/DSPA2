@@ -75,7 +75,7 @@ var user_marker = new H.map.Marker(user_coords, {icon: icon});
 map.addObject(user_marker);
 
 const group = new H.map.Group()
-map.addObject(group)
+//map.addObject(group)
 
 // Gets all the references from the specified realtime database folder
 const database = getDatabase();
@@ -98,23 +98,14 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
             // Creates a marker belonging to the referenced upload and adds it to the map
             var marker = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_,
                                             lng: itemRef._node.children_.root_.right.value.value_})
-            worldMap.addObject(marker);
 
+            // Stores the download URLs of the corresponding image in the markers
             const url = getURL(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg");
             url.then(function(result) {
-
-                // Definition of the click event, create an image from the url in an info bubble
-                marker.addEventListener("tap", event => {
-                    const bubble = new H.ui.InfoBubble(
-                    event.target.getPosition(),
-                    {
-                        content: '<img src="'+result+'">'
-                    }
-                    );
-                    ui.addBubble(bubble)
-                });
-                console.log("downloadurl: ", result);
+                marker.setData(result);
             });
+
+            // Adds the marker to the group
             group.addObject(marker)
         });
     }).catch(function(error){
@@ -123,18 +114,20 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
 }
 
 createMarkersFromPromises(map, firebaseRef, storage);
+map.addObject(group);
 
-// Move UI elements to the top left of the map
-var mapSettings = ui.getControl('mapsettings');
-var zoom = ui.getControl('zoom');
+// Adds the click event listener to all marker elements of group
+group.addEventListener("tap", event => {
+    const bubble = new H.ui.InfoBubble(
+    event.target.getPosition(),
+    {
+        content: '<img src="'+event.target.getData()+'">'
+    }
+    );
+    ui.addBubble(bubble)
+});
+
+// Set the scale bar in the top left
 var scalebar = ui.getControl('scalebar');
-var panorama = ui.getControl('panorama');
-
-panorama.setAlignment('top-right');
-mapSettings.setAlignment('top-left');
-zoom.setAlignment('top-left');
 scalebar.setAlignment('top-left');
 };
-
-// createInfoBubble(map);
-// credits https://stackoverflow.com/questions/51729938/add-info-bubbles-to-here-

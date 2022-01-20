@@ -75,7 +75,6 @@ var user_marker = new H.map.Marker(user_coords, {icon: icon});
 map.addObject(user_marker);
 
 const group = new H.map.Group()
-//map.addObject(group)
 
 // Gets all the references from the specified realtime database folder
 const database = getDatabase();
@@ -83,10 +82,6 @@ const firebaseRef = ref(database, "Images");
 
 // Create the storage link
 const storage = getStorage();
-
-async function getURL(store, reference) {
-    return await getDownloadURL(sRef(store, reference));
-}
 
 // Function dat gets the uploads from the realtime database and makes markers on the map accordingly
 async function createMarkersFromPromises(worldMap, folderReference, store) {
@@ -100,8 +95,8 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
                                             lng: itemRef._node.children_.root_.right.value.value_})
 
             // Stores the download URLs of the corresponding image in the markers
-            const url = getURL(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg");
-            url.then(function(result) {
+            getDownloadURL(sRef(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg"))
+            .then(function(result) {
                 marker.setData(result);
             });
 

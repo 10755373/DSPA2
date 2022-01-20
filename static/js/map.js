@@ -25,7 +25,7 @@ import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com
 
 // Check if geolocation is supported by the browser
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
+    navigator.geolocation.watchPosition(showPosition);
 } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
 }

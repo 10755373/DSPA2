@@ -23,6 +23,8 @@ import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.2/
 // Initialize Storage
 import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
 
+// response.addHeader("Access-Control-Allow-Origin", "*");
+
 // Check if geolocation is supported by the browser
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(showPosition);
@@ -36,12 +38,23 @@ function showPosition(position) {
     var longi= position.coords.longitude;
     var user_coords = { lng: longi, lat: latit}
 
+
+// const hereCredentials = {
+//     apikey: 'aZ56VZmkzI0btrmw6qpm-Z5pvNh_j3BKQ8hLig_C1ms'
+//     }  
+
 // Initialize the platform object:
 var platform = new H.service.Platform({
-'app_id': '{{app_ID}}',
-'app_code': '{{app_CODE}}',
- useHTTPS: true
+app_id: 'LVzP8znwHiItQlnZsd3g',
+app_code: 'ufbceoJhaG-H270WOS1rww',
+// 'apikey': '-Z5pvNh_j3BKQ8hLig_C1ms'
+//  useHTTPS: true
 });
+// const platform = new H.service.Platform({ 'apikey': 'hereCredentials.apikey' });
+
+// var platform = new H.service.Platform({
+//     apikey: '2uMespfkDbPGdqv-oDtU7RrWaqBvVk9woohNUPX4VOs'
+// });
 
 var pixelRatio = window.devicePixelRatio || 1;
 var defaultLayers = platform.createDefaultLayers({
@@ -66,7 +79,7 @@ var userIcon = new H.map.Icon("/static/img/you_icon.png", {size: {w: 100, h: 100
 var userMarker = new H.map.Marker(user_coords, {icon: userIcon});
 map.addObject(userMarker);
 
-const group = new H.map.Group()
+const groupmarkers = new H.map.Group()
 
 // Gets all the references from the specified realtime database folder
 const database = getDatabase();
@@ -97,7 +110,7 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
             });
 
             // Adds the marker to the group
-            group.addObject(marker)
+            groupmarkers.addObject(marker)
         });
     }).catch(function(error){
       console.log(error);
@@ -105,10 +118,10 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
 }
 
 createMarkersFromPromises(map, firebaseRef, storage);
-map.addObject(group);
+map.addObject(groupmarkers);
 
 // Adds the click event listener to all marker elements of group
-group.addEventListener("tap", event => {
+groupmarkers.addEventListener("tap", event => {
     const bubble = new H.ui.InfoBubble(
     event.target.getPosition(),
     {
@@ -116,7 +129,14 @@ group.addEventListener("tap", event => {
     }
     );
     ui.addBubble(bubble)
-});
+}, );
+
+
+// function addInfoBubble(map){
+//     var group = 
+// }
+
+
 
 // Set the scale bar in the top left
 var scalebar = ui.getControl('scalebar');

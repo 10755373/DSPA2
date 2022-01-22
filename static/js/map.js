@@ -45,10 +45,11 @@ function showPosition(position) {
 
 // Initialize the platform object:
 var platform = new H.service.Platform({
-app_id: 'LVzP8znwHiItQlnZsd3g',
-app_code: 'ufbceoJhaG-H270WOS1rww',
+'apikey': '6yITc3tU0SIV6hPr3Aaxk1iIdMBHTQPv8sWIBpuLvnY',
+'useHTTPS': true
+//app_id: 'LVzP8znwHiItQlnZsd3g',
+//app_code: 'ufbceoJhaG-H270WOS1rww',
 // 'apikey': '-Z5pvNh_j3BKQ8hLig_C1ms'
-//  useHTTPS: true
 });
 // const platform = new H.service.Platform({ 'apikey': 'hereCredentials.apikey' });
 
@@ -132,13 +133,28 @@ groupmarkers.addEventListener("tap", event => {
 }, );
 
 
-// function addInfoBubble(map){
-//     var group = 
-// }
-
-
-
 // Set the scale bar in the top left
 var scalebar = ui.getControl('scalebar');
 scalebar.setAlignment('top-left');
 };
+
+
+
+var modal = document.getElementById("myModal")
+var span = document.getElementsByClassName("close")[0];
+
+function showModal() {
+   modal.style.display = 'block';
+}
+
+window.addEventListener('load', showModal);
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}

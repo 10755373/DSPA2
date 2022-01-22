@@ -27,7 +27,40 @@ import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com
 
 // Check if geolocation is supported by the browser
 if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(showPosition);
+    var geoError = function(error) {
+
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "User denied the request for Geolocation.",
+              })
+              break;
+            case error.POSITION_UNAVAILABLE:
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Location information is unavailable",
+              })
+              break;
+            case error.TIMEOUT:
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "The request to get user location timed out.",
+              })
+              break;
+            case error.UNKNOWN_ERROR:
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "An unknown error occurred.",
+              })
+              break;}
+
+      };
+    navigator.geolocation.watchPosition(showPosition,geoError);
 } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
 }
@@ -158,3 +191,4 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+

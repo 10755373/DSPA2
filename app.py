@@ -69,11 +69,18 @@ app = Flask(__name__)
 
 
 # Defines the routes to the webpages.
+
+# If index is loaded, set info message to true
 @app.route("/")
+def index():
+    # return render_template("map.html")
+    return render_template('map.html', infomessage=True, app_ID=app_ID, app_CODE=app_CODE)
+
+# If map is loaded not as index, set info message to fasle
 @app.route("/map.html")
 def map():
     # return render_template("map.html")
-    return render_template('map.html', app_ID=app_ID, app_CODE=app_CODE)
+    return render_template('map.html', infomessage=False, app_ID=app_ID, app_CODE=app_CODE)
 
 
 @app.route("/info.html")
@@ -159,7 +166,7 @@ def ethics_paper():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
-
+    # app.run(debug=True)
 
 # closes camara
 # camera.release()

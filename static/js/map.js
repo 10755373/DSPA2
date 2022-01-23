@@ -114,12 +114,13 @@ const groupmarkers = new H.map.Group()
 // Gets all the references from the specified realtime database folder
 const database = getDatabase();
 const firebaseRef = ref(database, "Images");
-
 // Create the storage link
 const storage = getStorage();
 
 // Create a special marker for the pins
 var pinIcon = new H.map.Icon("/static/img/pin.png", {size: {w: 100, h: 100}});
+
+var cctvCounter = 0;
 
 // Function dat gets the uploads from the realtime database and makes markers on the map accordingly
 async function createMarkersFromPromises(worldMap, folderReference, store) {
@@ -138,10 +139,11 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
             .then(function(result) {
                 marker.setData(result);
             });
-
+            cctvCounter += 1;
             // Adds the marker to the group
             groupmarkers.addObject(marker)
         });
+        document.getElementById("CctvCounter").innerHTML = "CCTV Counter: "+ cctvCounter;
     }).catch(function(error){
       console.log(error);
     });
@@ -169,6 +171,7 @@ groupmarkers.addEventListener("tap", event => {
 var scalebar = ui.getControl('scalebar');
 scalebar.setAlignment('top-left');
 };
+
 
 
 

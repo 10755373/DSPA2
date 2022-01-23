@@ -82,11 +82,6 @@ def home():
     return render_template("info.html")
 
 
-@app.route("/gallery.html")
-def gallery():
-    return render_template("gallery.html")
-
-
 @app.route("/upload.html")
 def upload():
     return render_template("upload.html")

@@ -112,7 +112,40 @@ function cameraStart() {
 // Take a picture when cameraTrigger is tapped
 cameraTrigger.onclick= function() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        var geoError = function(error) {     
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "User denied the request for Geolocation.",
+                  })
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Location information is unavailable",
+                  })
+                  break;
+                case error.TIMEOUT:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "The request to get user location timed out.",
+                  })
+                  break;
+                case error.UNKNOWN_ERROR:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "An unknown error occurred.",
+                  })
+                  break;
+            }
+        
+          };
+        navigator.geolocation.getCurrentPosition(showPosition, geoError);
         cameraSensor.width = cameraView.videoHeight;
         cameraSensor.height = cameraView.videoHeight;
         cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);

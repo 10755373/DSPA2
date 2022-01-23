@@ -183,13 +183,11 @@ function photo(file) {
                     if(this.response == '0'){
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
-                            text: "Your CCTV Sign has been saved",
+                            text: "Upload successful!",
                           });
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...',
                             text: this.response,
                           });
                     }

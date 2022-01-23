@@ -1,16 +1,13 @@
 # Uploading page adapted from https://github.com/hemanth-nag/Camera_Flask_App/blob/main/camera_flask_app.py
 # and https://roytuts.com/upload-and-display-image-using-python-flask/, accesed 2022/07/01
 
-from flask import Flask, render_template, Response, request, json
-import cv2
+from flask import Flask, render_template, request
 import datetime
 import os
 import geocoder
-from metadata import PNG_to_JPG, metadata
 import requests
 
 import torch
-from torchvision import transforms
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from PIL import Image
@@ -29,9 +26,6 @@ PARAMS = {'app_id': app_ID, 'app_code': app_CODE, 'searchtext': "amsterdam"}
 # sending get request and saving the response as response object
 r = requests.get(url=URL, params=PARAMS)
 data = r.json()
-
-# latitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Latitude']
-# longitude = data['Response']['View'][0]['Result'][0]['Location']['DisplayPosition']['Longitude']
 
 config = {
     "apiKey": "AIzaSyDsgkvnYUtXSDQbG6VHQ1wsA85OgMl35dg",
@@ -69,21 +63,23 @@ app = Flask(__name__)
 
 
 # Defines the routes to the webpages.
+
+# If index is loaded, set info message to true
 @app.route("/")
+def index():
+    # return render_template("map.html")
+    return render_template('map.html', infomessage=True, app_ID=app_ID, app_CODE=app_CODE)
+
+# If map is loaded not as index, set info message to fasle
 @app.route("/map.html")
 def map():
     # return render_template("map.html")
-    return render_template('map.html', app_ID=app_ID, app_CODE=app_CODE)
+    return render_template('map.html', infomessage=False, app_ID=app_ID, app_CODE=app_CODE)
 
 
 @app.route("/info.html")
 def home():
     return render_template("info.html")
-
-
-@app.route("/gallery.html")
-def gallery():
-    return render_template("gallery.html")
 
 
 @app.route("/upload.html")
@@ -94,8 +90,8 @@ def upload():
 @app.route('/photo', methods=['GET', 'POST'])
 def photo():
     if request.method == 'POST':
+
         # it raise error when there is no `snap` in form
-        fs, latitude, longitude = None, None, None
         fs = request.files.get('snap')
         latitude = request.form.get('lat')
         longitude = request.form.get('lon')
@@ -134,19 +130,17 @@ def photo():
                         db.set(data)
                     return '0'
                 else:
-                    return 'No CCTV Sign has been detected! Please, Try Again.'
+                    return 'No CCTV sign detected.'
             except:
-                return 'Location undefined, Please, Try Again.'
+                return 'Location undefined.'
         else:
-            return 'You forgot Snap!'
-        #return json.jsonify({
-        #    'response': response
-        #})
+            return 'Something went wrong. Please, try again.'
 
 
 def get_prediction(image, model):
     with torch.no_grad():
         output = model(image)
+
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(output.data, 1)
         return predicted
@@ -159,7 +153,4 @@ def ethics_paper():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-# closes camara
-# camera.release()
+    # app.run(debug=True)

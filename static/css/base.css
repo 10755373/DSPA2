@@ -10,6 +10,7 @@ acessed on 20/12/2021 */
 nav.navbar-center {
     padding: 10px;
     background-color: #F0F0F0;
+    border-top: 2px solid #d54444;
     .navbar-collapse {
         justify-content : center; /* center the elements in the block if there is flex */
         -webkit-justify-content : center; /* make it works on some navigators */

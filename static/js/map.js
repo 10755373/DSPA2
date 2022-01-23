@@ -155,7 +155,8 @@ groupmarkers.addEventListener("tap", event => {
     const bubble = new H.ui.InfoBubble(
     event.target.getPosition(),
     {
-        content: '<img src="'+event.target.getData()+'">'
+        content: '<img src="'+event.target.getData()+'">' +
+                    '<a href="'+event.target.getData()+'" target="_self" > Open image source. </a>'
     }
     );
     ui.addBubble(bubble)

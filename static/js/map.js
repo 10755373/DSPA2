@@ -33,28 +33,24 @@ if (navigator.geolocation) {
             case error.PERMISSION_DENIED:
               Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: "User denied the request for Geolocation.",
+                text: "Request for Geolocation denied. Please, give permission.",
               })
               break;
             case error.POSITION_UNAVAILABLE:
               Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: "Location information is unavailable",
               })
               break;
             case error.TIMEOUT:
               Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: "The request to get user location timed out.",
+                text: "User location request timed out.",
               })
               break;
             case error.UNKNOWN_ERROR:
               Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
                 text: "An unknown error occurred.",
               })
               break;}

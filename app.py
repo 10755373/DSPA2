@@ -132,7 +132,7 @@ def photo():
                 # If there is no data in that spot yet, it sets the data.
                     except AttributeError:
                         db.set(data)
-                    return 'Got Snap! Your CCTV Sign has been saved.'
+                    return '0'
                 else:
                     return 'No CCTV Sign has been detected! Please, Try Again.'
             except:

@@ -4,7 +4,36 @@
 {% block title %}Map{% endblock %}
 
 {% block content %}
-<div id="mapContainer"></div>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+
+<div id="mapContainer">
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Bigger Brother</h2>
+            </div>
+            <div class="modal-body">
+                <p>Here you can see all the CCTVs near you! Do you see a camera? Post it on the map.</p>
+                <p>Now you can watch the watchers!</p>
+            </div>
+            <div class="modal-footer">
+                <h3>Modal Footer</h3>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
 
 <script type="module" src="{{url_for('static', filename='js/map.js')}}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

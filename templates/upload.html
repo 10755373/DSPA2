@@ -48,7 +48,50 @@ cameraOutput = document.querySelector("#camera--output"),
 cameraSensor = document.querySelector("#camera--sensor"),
 cameraTrigger = document.querySelector("#camera--trigger");
 
-
+function geoStart() {
+    if (navigator.geolocation) {
+        var geoError = function(error) {     
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "User denied the request for Geolocation.",
+                  })
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Location information is unavailable",
+                  })
+                  break;
+                case error.TIMEOUT:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "The request to get user location timed out.",
+                  })
+                  break;
+                case error.UNKNOWN_ERROR:
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "An unknown error occurred.",
+                  })
+                  break;
+            }
+        
+          };
+            navigator.geolocation.getCurrentPosition(showPosition, geoError);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Geolocation is not supported on your navigator.",
+             });
+        }
+};
 // Access the device camera and stream to cameraView
 function cameraStart() {
     navigator.mediaDevices
@@ -57,10 +100,15 @@ function cameraStart() {
             track = stream.getTracks()[0];
             cameraView.srcObject = stream;
         })
-        .catch(function(error) {
-            console.error("Oops. Something is broken.", error);
+        .catch(function(error) {        
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "User denied the request for Camera. Please allow Camera permission.",
+              })
         });
 };
+
 // Take a picture when cameraTrigger is tapped
 cameraTrigger.onclick= function() {
     if (navigator.geolocation) {
@@ -73,18 +121,21 @@ cameraTrigger.onclick= function() {
         cameraOutput.classList.add("taken");
 
     } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Geolocation is not supported on your navigator.",
+              });
     }
-    
-
-
     // track.stop();
 };
+
 
 function showPosition(position) {
 				window.lat = position.coords.latitude;
 				window.lon = position.coords.longitude;
 			};
+    
 
 function photo(file) {
 			var formdata =  new FormData();
@@ -94,14 +145,26 @@ function photo(file) {
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", "{{ url_for('photo') }}", true);
 			xhr.onload = function() {
-			if(this.status = 200) {
-						console.log(this.response);
-					} else {
-						console.error(xhr);
-					}
-					alert(this.response);
-				};
-				xhr.send(formdata);
+                if(this.status = 200) {
+                    console.log(this.response);
+                    if(this.response == '0'){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: "Your CCTV Sign has been saved",
+                          });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: this.response,
+                          });
+                    }
+                } else {
+                    console.error(xhr);
+				}
+            };
+			xhr.send(formdata);
 			};
 
 
@@ -112,4 +175,5 @@ window.addEventListener("load", cameraStart, false);
 
 <!-- Reference to adapter.js -->
 <script src="{{ url_for('static', filename='js/adapter-min.js')}}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

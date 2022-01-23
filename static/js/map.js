@@ -108,7 +108,7 @@ defaultLayers.normal.map, {
 var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 var ui = H.ui.UI.createDefault(map, defaultLayers);
 
-// Create a special marker for the ussr location
+// Create a special marker for the user location
 var userIcon = new H.map.Icon("/static/img/you_icon.png", {size: {w: 100, h: 100}});
 var userMarker = new H.map.Marker(user_coords, {icon: userIcon});
 map.addObject(userMarker);
@@ -162,6 +162,8 @@ groupmarkers.addEventListener("tap", event => {
         content: '<img src="'+event.target.getData()+'">'
     }
     );
+    ui.getBubbles().forEach(bub => ui.removeBubble(bub));
+
     ui.addBubble(bubble)
 }, );
 

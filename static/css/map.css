@@ -38,28 +38,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /* Modal Content */
 .modal-content {
   position: fixed;
-  bottom: 0;
-  background-color: #fefefe;
+  bottom: 90px;
   width: 100%;
-  -webkit-animation-name: slideIn;
-  -webkit-animation-duration: 0.4s;
-  animation-name: slideIn;
-  animation-duration: 0.4s
-}
-
-/* The Close Button */
-.close {
-  color: white;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 .modal-header {
@@ -68,7 +48,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 5px 30px;
+    }
 
 .modal-footer {
   padding: 2px 16px;

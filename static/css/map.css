@@ -15,22 +15,22 @@
 }
 
 .H_ib_content a {
-    color: white;
+    color: gray;
     text-decoration: none;
 }
 
 .H_ib_content a:visited {
-  color: white;
+  color: gray;
   text-decoration: none;
 }
 
 .H_ib_content a:hover {
-  color: LightGray;
+  color: DarkGray;
   text-decoration: none;
 }
 
 .H_ib_content a:active {
-  color: white;
+  color: gray;
   text-decoration: none;
 }
 

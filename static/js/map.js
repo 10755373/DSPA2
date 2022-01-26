@@ -23,12 +23,22 @@ import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.2/
 // Initialize Storage
 import { getStorage, ref as sRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-storage.js"
 
-// response.addHeader("Access-Control-Allow-Origin", "*");
 
-// Check if geolocation is supported by the browser
-if (navigator.geolocation) {
-    var geoError = function(error) {
 
+// Get the location from the user
+function showPosition(position) {
+    var user_crd = {lat: position.coords.latitude, lng:position.coords.longitude};
+    if (userMarker == null){
+        var userIcon = new H.map.Icon("/static/img/you_icon.png", {size: {w: 100, h: 100}});
+        var userMarker = new H.map.Marker(user_crd, {icon: userIcon});
+        window.map.addObject(userMarker);
+    } else {
+        userMarker.setGeometry(user_crd);
+    }
+    window.map.setCenter(user_crd);     
+}
+
+function geoError(error){
         switch(error.code) {
             case error.PERMISSION_DENIED:
               Swal.fire({
@@ -53,61 +63,54 @@ if (navigator.geolocation) {
                 icon: 'error',
                 text: "An unknown error occurred.",
               })
-              break;}
-
-      };
-    navigator.geolocation.watchPosition(showPosition,geoError);
-} else {
-    x.innerHTML = "Geolocation is not supported by this browser.";
+              break;
+        }    
 }
 
-// Get the location from the user
-function showPosition(position) {
-    var latit= position.coords.latitude;
-    var longi= position.coords.longitude;
-    var user_coords = { lng: longi, lat: latit}
+// Check if geolocation is supported by the browser
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,geoError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
 
 
-// const hereCredentials = {
-//     apikey: 'aZ56VZmkzI0btrmw6qpm-Z5pvNh_j3BKQ8hLig_C1ms'
-//     }  
 
 // Initialize the platform object:
-var platform = new H.service.Platform({
-'apikey': '6yITc3tU0SIV6hPr3Aaxk1iIdMBHTQPv8sWIBpuLvnY',
-'useHTTPS': true
-//app_id: 'LVzP8znwHiItQlnZsd3g',
-//app_code: 'ufbceoJhaG-H270WOS1rww',
-// 'apikey': '-Z5pvNh_j3BKQ8hLig_C1ms'
-});
-// const platform = new H.service.Platform({ 'apikey': 'hereCredentials.apikey' });
+function map_init(){
+        var default_coords = {lat: 52, lng: 5};
+        var platform = new H.service.Platform({
+            'apikey': '6yITc3tU0SIV6hPr3Aaxk1iIdMBHTQPv8sWIBpuLvnY',
+        });
 
-// var platform = new H.service.Platform({
-//     apikey: '2uMespfkDbPGdqv-oDtU7RrWaqBvVk9woohNUPX4VOs'
-// });
+        var pixelRatio = window.devicePixelRatio || 1;
+        var defaultLayers = platform.createDefaultLayers({
+            tileSize: pixelRatio === 1 ? 256 : 512,
+            ppi: pixelRatio === 1 ? undefined : 320
+        });
 
-var pixelRatio = window.devicePixelRatio || 1;
-var defaultLayers = platform.createDefaultLayers({
-    tileSize: pixelRatio === 1 ? 256 : 512,
-    ppi: pixelRatio === 1 ? undefined : 320
-});
+        // Step 2: initialize a map
+        window.map = new H.Map(document.getElementById('mapContainer'),
+            defaultLayers.vector.normal.map,{
+            pixelRatio: pixelRatio,
+            zoom: 13,
+            center: default_coords
+        });
 
-// Step 2: initialize a map
-var map = new H.Map(document.getElementById('mapContainer'),
-defaultLayers.normal.map, {
-    pixelRatio: pixelRatio,
-    zoom: 13,
-    center: user_coords
-});
+    // Step 3: make the map interactive
+        var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+        window.ui = H.ui.UI.createDefault(map, defaultLayers);
 
-// Step 3: make the map interactive
-var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-var ui = H.ui.UI.createDefault(map, defaultLayers);
+    // Set the scale bar in the top left
+        var scalebar = ui.getControl('scalebar');
+        scalebar.setAlignment('top-left');
 
-// Create a special marker for the user location
-var userIcon = new H.map.Icon("/static/img/you_icon.png", {size: {w: 100, h: 100}});
-var userMarker = new H.map.Marker(user_coords, {icon: userIcon});
-map.addObject(userMarker);
+        var zoom = ui.getControl('zoom');
+        zoom.setAlignment('right-middle');
+}
+
 
 const groupmarkers = new H.map.Group()
 
@@ -128,12 +131,11 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
     // Gets all the upload references in the reference folder and creates markers for them
     await get(folderReference).then(function(result) {
         result.forEach(function(itemRef) {
-
             // Creates a marker belonging to the referenced upload and adds it to the map
             var marker = new H.map.Marker({lat: itemRef._node.children_.root_.value.value_,
                                             lng: itemRef._node.children_.root_.right.value.value_},
                                             {icon: pinIcon});
-
+            
             // Stores the download URLs of the corresponding image in the markers
             getDownloadURL(sRef(store, "Images/" + itemRef.ref._path.pieces_[1] + ".jpg"))
             .then(function(result) {
@@ -141,7 +143,7 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
             });
             cctvCounter += 1;
             // Adds the marker to the group
-            groupmarkers.addObject(marker)
+            groupmarkers.addObject(marker);
         });
         document.getElementById("CctvCounter").innerHTML = "CCTV Counter: "+ cctvCounter;
     }).catch(function(error){
@@ -149,30 +151,25 @@ async function createMarkersFromPromises(worldMap, folderReference, store) {
     });
 }
 
+map_init();
+getLocation();
 createMarkersFromPromises(map, firebaseRef, storage);
+
 map.addObject(groupmarkers);
+
 
 // Adds the click event listener to all marker elements of group
 groupmarkers.addEventListener("tap", event => {
     const bubble = new H.ui.InfoBubble(
-    event.target.getPosition(),
+    event.target.getGeometry(),
     {
         content: '<img src="'+event.target.getData()+'">' +
-                    '<a href="'+event.target.getData()+'" target="_self" > Open image source. </a>'
-    }
-    );
+                    '<a href="'+event.target.getData()+'" target="_self" > Click here to Open Image</a>'
+    });
     ui.getBubbles().forEach(bub => ui.removeBubble(bub));
 
     ui.addBubble(bubble)
 }, );
-
-
-// Set the scale bar in the top left
-var scalebar = ui.getControl('scalebar');
-scalebar.setAlignment('top-left');
-};
-
-
 
 
 var modal = document.getElementById("myModal")
@@ -184,11 +181,11 @@ function showModal() {
 
 window.addEventListener('load', showModal);
 
-span.onclick = function() {
+span.onclick = function(){
   modal.style.display = "none";
 }
 
-window.onclick = function(event) {
+window.onclick = function(event){
   if (event.target == modal) {
     modal.style.display = "none";
   }

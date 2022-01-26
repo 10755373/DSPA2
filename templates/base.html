@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/info.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/upload.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/map.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
 
     <!-- Files for Gallery -->
     <link rel="stylesheet" href="{{ url_for('static', filename='lightbox2/dist/css/lightbox.min.css') }}">
@@ -26,12 +25,13 @@
 
     <!-- Files for Map -->
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-pano.js"></script>
+    
+    <!-- JS API -->
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- Files for the Upload -->
     <meta charset="utf-8">

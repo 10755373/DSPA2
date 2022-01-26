@@ -15,22 +15,22 @@
 }
 
 .H_ib_content a {
-    color: white;
+    color: rgb(50, 60, 190);
     text-decoration: none;
 }
 
 .H_ib_content a:visited {
-  color: white;
+  color: rgb(50, 60, 150);
   text-decoration: none;
 }
 
 .H_ib_content a:hover {
-  color: LightGray;
+  color: lightblue;
   text-decoration: none;
 }
 
 .H_ib_content a:active {
-  color: white;
+  color: rgb(50, 60, 190);
   text-decoration: none;
 }
 

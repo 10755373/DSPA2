@@ -19,7 +19,8 @@ RUN pip install Flask && \
     pip install pandas && \
     pip install sklearn && \
     pip install data_loader && \
-    pip install pyrebase
+    pip install pyrebase && \
+    pip install flask_cors
 
 WORKDIR /app
 COPY . /app
